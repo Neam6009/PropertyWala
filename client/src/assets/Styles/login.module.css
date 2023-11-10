@@ -24,7 +24,7 @@
   align-items: center;
 }
 
-a {
+loginParentContainer a {
   text-decoration: none;
 }
 
@@ -127,25 +127,25 @@ a {
   }
 }
 
-a:link {
+.loginParentContainer a:link {
   color: #00aff4;
   background-color: transparent;
   text-decoration: none;
 }
 
-a:visited {
+.loginParentContainer a:visited {
   color: #00aff4;
   background-color: transparent;
   text-decoration: none;
 }
 
-a:hover {
+.loginParentContainer a:hover {
   color: #00aff4;
   background-color: transparent;
   text-decoration: none;
 }
 
-a:active {
+.loginParentContainer a:active {
   color: #00aff4;
   background-color: transparent;
   text-decoration: none;
