@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 import React from 'react';
 import classes from '../assets/Styles/navbar.module.css';
 import { Outlet, Link } from 'react-router-dom';
+=======
+import React from "react";
+import "../assets/Styles/navbar.css";
+import { Outlet, Link } from "react-router-dom";
+>>>>>>> 398b5e6998cfccc690a40586b71ae156805ff1de
 
 const Navbar = () => {
   return (
     <>
+<<<<<<< HEAD
       <div className={classes.mobileNav}>
         <p className={classes.logoName}>
           <Link to="/">PropertyWala</Link>
@@ -23,6 +30,14 @@ const Navbar = () => {
           <Link to="/">PropertyWala</Link>
         </p>
         <div className={classes.navItems}>
+=======
+      <div className="navbar">
+        <p className="logoName">
+          {" "}
+          <Link to="/">PropertyWala</Link>{" "}
+        </p>
+        <div className="navItems">
+>>>>>>> 398b5e6998cfccc690a40586b71ae156805ff1de
           <p>
             <Link to="/show-properties/rent">Rent</Link>
           </p>
@@ -32,6 +47,7 @@ const Navbar = () => {
           <p>
             <Link to="/list-property">Sell</Link>
           </p>
+<<<<<<< HEAD
 
           <div name="portfolioDropdown" id="" className={classes.navbarOptions}>
             <span>Portfolio </span>
@@ -83,4 +99,30 @@ const Navbar = () => {
   );
 };
 
+=======
+          <p>Portfolio</p>
+          <p>
+            <Link to="/blogs">Resources</Link>
+          </p>
+          <p>About Us</p>
+          <p>Premium</p>
+          <p>
+            <Link to="/compose-blog">Compose</Link>
+          </p>
+          <p>Admin Controls</p>
+        </div>
+        <div className="navButton">
+          <Link to="/login">
+            <button className="navLogin">Login</button>
+          </Link>
+          <Link to="/register">
+            <button className="navSignup">register</button>
+          </Link>
+        </div>
+      </div>
+    </>
+  );
+};
+
+>>>>>>> 398b5e6998cfccc690a40586b71ae156805ff1de
 export default Navbar;

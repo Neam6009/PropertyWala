@@ -2,13 +2,18 @@
   padding: 0 1rem;
 }
 
-.hero-property-card {
+.heroPropertyCard {
   display: none;
 }
 
 .Hero {
   display: flex;
   flex-direction: row;
+}
+
+.rbsSpan {
+  font-size: 2.5rem;
+  color: #e1def6;
 }
 
 .heroText {
@@ -67,6 +72,7 @@
   align-items: center;
   max-width: 30em;
   text-align: center;
+  gap: 2rem;
 }
 
 .s2OptionMenu {
@@ -156,6 +162,7 @@
 }
 
 .recommendations {
+  padding: 2rem;
   margin: 0 1rem;
 }
 
@@ -169,8 +176,9 @@
   background-color: #7164f0;
   color: white;
   width: 200px;
+  font-size: large;
   border: 0;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.5rem;
 }
 
 .recDesc {
@@ -255,20 +263,23 @@
 }
 
 @media screen and (min-width: 800px) {
+  .heroPropertyCard {
+    display: block;
+  }
   .HeroBackground {
-    background-image: url("/images/PW_map_background.png");
+    background-image: url("../images/PW_map_background.png");
     background-repeat: no-repeat;
     background-size: cover;
     padding: 0 1rem;
     gap: 2rem;
   }
 
-  .header-part-1 {
+  .headerPart1 {
     display: flex;
     justify-content: space-between;
   }
 
-  .header-part-2 {
+  .headerPart2 {
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -298,13 +309,17 @@
   }
 
   .s2Info {
+    display: flex;
+    flex-direction: column;
     text-align: left;
+    gap: 2rem;
   }
 
   .segment3 {
     max-height: 30em;
     display: flex;
     justify-content: space-between;
+    padding: 5rem;
   }
 
   .segment3 img {
@@ -342,6 +357,11 @@
 }
 
 @media screen and (min-width: 1000px) {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   .hero-property-card {
     display: block;
   }
@@ -351,7 +371,7 @@
     flex-direction: column;
   }
 
-  .header-part-1 {
+  .headerPart1 {
     display: flex;
     justify-content: space-evenly;
   }
@@ -368,7 +388,7 @@
     justify-content: space-between;
   }
 
-  .hero-nav {
+  .heroNav {
     width: 50rem;
     background-color: #fff;
     border-radius: 0.5rem;
@@ -418,6 +438,10 @@
 .rbsOption {
   padding: 1rem;
   font-size: large;
+}
+
+.bmp {
+  border-radius: 10px;
 }
 
 .rbsRS {

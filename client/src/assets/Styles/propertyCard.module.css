@@ -35,6 +35,9 @@
 .propertyCard_info i {
   color: #7164f0;
 }
+.coloredText {
+  color: #7164f0;
+}
 
 .propertyCardNav {
   display: flex;
@@ -48,6 +51,11 @@
 .pcBigText {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #7164f0;
+}
+
+.greyText{
+  color: grey;
 }
 
 .propertyCard {
