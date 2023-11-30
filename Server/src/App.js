@@ -9,10 +9,12 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const app = express();
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(jsonParser);
 
 const corsOptions ={
-   origin:'*', 
+   origin:'http://localhost:5173', 
    credentials:true,          
    optionSuccessStatus:200,
 }
@@ -23,8 +25,6 @@ doenv.config({
   path: './.env',
 });
 
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(__dirname + '/assets'));
 app.set('view engine', 'ejs');

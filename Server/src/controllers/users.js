@@ -98,16 +98,19 @@ exports.isLoggedIn = async (req, res, next) => {
       const decode = await promisify(jwt.verify)(req.cookies.joes, process.env.JWT_SECRET);
       const user = await userModel.User.findOne({ _id: decode.id });
       if (!user) {
-        return next();
+        return res.json({
+          error: 'No user logged in',
+        })
       }
-      req.user = user;
-      return next();
+      return res.status(200).json({
+        user
+      });
     } catch (error) {
       console.log(error);
-      return next();
+      res.status(400).json({ error });
     }
   } else {
-    next();
+    return;
   }
 };
 
