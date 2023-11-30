@@ -1,71 +1,100 @@
-import React from 'react'
-import '../assets/styles/footer.css'
+import React from 'react';
+import classes from '../assets/styles/footer.module.css';
+import { Link } from 'react-router-dom';
+import { AiOutlineInstagram } from 'react-icons/ai';
+import { AiFillLinkedin } from 'react-icons/ai';
+import { FaTwitter } from 'react-icons/fa';
+import { FaFacebookF } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <>
-    <footer className="homeFooter">
-      <a className="logo" href="../src/index.html">PropertyWala</a>
-      <div className="wrapper">
-        <div className="child-wrapper">
-          <div className="not-show"></div>
-          <div className="footer-section">
-            <h5>SELL A HOME</h5>
-            <p>Request an offer</p>
-            <p>Pricing</p>
-            <p>Reviews</p>
-            <p>Stories</p>
+      <footer className={classes.homeFooter}>
+        <Link className={classes.logo} href="../src/index.html">
+          PropertyWala
+        </Link>
+        <div className={classes.wrapper}>
+          <div className={classes.childWrapper}>
+            <div className={classes.notShow}></div>
+            <div className={classes.footerSection}>
+              <h5>SELL A HOME</h5>
+              <p>Request an offer</p>
+              <p>Pricing</p>
+              <p>Reviews</p>
+              <p>Stories</p>
+            </div>
+            <div className={classes.footerSection}>
+              <h5>BUY A HOME</h5>
+              <p>Buy</p>
+              <p>Finance</p>
+            </div>
+            <div className={classes.footerSection}>
+              <h5>BUY, RENT AND SELL</h5>
+              <p>Buy and sell properties</p>
+              <p>Rent home</p>
+              <p>Builder trade-up</p>
+            </div>
           </div>
-          <div className="footer-section">
-            <h5>BUY A HOME</h5>
-            <p>Buy</p>
-            <p>Finance</p>
-          </div>
-          <div className="footer-section">
-            <h5>BUY, RENT AND SELL</h5>
-            <p>Buy and sell properties</p>
-            <p>Rent home</p>
-            <p>Builder trade-up</p>
+
+          <div className={classes.childWrapper}>
+            <div className={classes.notShow}></div>
+            <div className={classes.footerSection}>
+              <h5>TERMS & PRIVACY</h5>
+              <Link href="/trust-and-safety">
+                <p>Trust & Safety</p>
+              </Link>
+              <Link href="terms-of-service">
+                <p>Terms of Service</p>
+              </Link>
+              <Link href="privacy-policy">
+                <p>Privacy Policy</p>
+              </Link>
+            </div>
+            <div className={classes.footerSection}>
+              <h5>ABOUT</h5>
+              <p>Company</p>
+              <p>How it works</p>
+              <p>Contact</p>
+              <p>Investors</p>
+            </div>
+            <div className={classes.footerSection}>
+              <h5>RESOURCES</h5>
+              <Link href="/blogs">
+                <p>Blog</p>
+              </Link>
+              <Link href="/help">
+                <p>Guides</p>
+              </Link>
+              <Link href="/FAQ">
+                <p>FAQ</p>
+              </Link>
+              <Link href="/help">
+                <p>Help Center</p>
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="child-wrapper">
-          <div className="not-show"></div>
-          <div className="footer-section">
-            <h5>TERMS & PRIVACY</h5>
-            <a href="/trust-and-safety"><p>Trust & Safety</p></a>
-            <a href="terms-of-service"><p>Terms of Service</p></a>
-            <a href="privacy-policy"><p>Privacy Policy</p></a>
-          </div>
-          <div className="footer-section">
-            <h5>ABOUT</h5>
-            <p>Company</p>
-            <p>How it works</p>
-            <p>Contact</p>
-            <p>Investors</p>
-          </div>
-          <div className="footer-section">
-            <h5>RESOURCES</h5>
-            <a href="/blogs"><p>Blog</p></a>
-            <a href="/help"><p>Guides</p></a>
-            <a href="/FAQ"><p>FAQ</p></a>
-            <a href="/help"><p>Help Center</p></a>
+        <div className={classes.commonFooter}>
+          <span>PropertyWala</span>
+          <div className={classes.contactIcons}>
+            <span>
+              <FaFacebookF />
+            </span>
+            <span>
+              <AiOutlineInstagram />
+            </span>
+            <span>
+              <FaTwitter />
+            </span>
+            <span>
+              <AiFillLinkedin />
+            </span>
           </div>
         </div>
-      </div>
-
-      <div className="commonFooter">
-        <span>PropertyWala</span>
-        <div className="contactIcons">
-          <span><i className="fa-brands fa-facebook-f"></i></span>
-          <span><i className="fa-brands fa-instagram"></i></span>
-          <span><i className="fa-brands fa-twitter"></i></span>
-          <span><i className="fa-brands fa-linkedin"></i></span>
-        </div>
-      </div>
-    </footer>
+      </footer>
     </>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

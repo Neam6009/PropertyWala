@@ -1,36 +1,103 @@
-import React from 'react';
-import classes from '../assets/Styles/register.module.css';
+import React from "react";
+import { useState } from "react";
+import classes from "../assets/Styles/register.module.css";
 
 const SignUp = () => {
-  return (
-    <div className={classes.loginParentContainer}>
-      <div className={classes.loginChildContainer}>
-        <h2 className={classes.welcomeMessage}>Create an account</h2>
-        <form action="/auth/register" method="post">
-          <label for="email">Email</label>
-          <input type="email" name="email" id="email" required></input>
-          <label for="name">Username</label>
-          <input type="text" name="name" id="name" required></input>
-          <label for="password">password</label>
-          <input type="password" name="password" id="password" required></input>
-          <button type="submit" id="register">
-            Register
-          </button>
-          {/* <% if (msg) { %>
-                <p className={classes.msg}> <%= msg %></p>
-                <%}%> */}
-          <a href="/login">
-            <p className={classes.alreadyAccount}>Already have an account?</p>
-          </a>
-          <p>
-            By registering you agree to Property Wala's
-            <span>Terms of Service</span> and
-            <span>Privacy Policy</span>.
-          </p>
-        </form>
-      </div>
-    </div>
-  );
+	const [error, setError] = useState();
+	const [message, setMessage] = useState();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
+
+	const registerHandler = async (event) => {
+		event.preventDefault();
+
+		console.log(email, password);
+
+		try {
+			const response = await fetch(
+				"http://localhost:3000/auth/register",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, password }),
+				}
+			);
+
+			const data = await response.json();
+			if (data.msg) {
+				setMessage(data.msg);
+				console.log("Login successful:", data);
+			} else {
+				setError(data.error);
+				console.error("Login failed");
+			}
+		} catch (error) {
+			console.error("Network error:", error);
+		}
+
+		setEmail("");
+		setName("");
+		setPassword("");
+	};
+
+	return (
+		<div className={classes.loginParentContainer}>
+			<div className={classes.loginChildContainer}>
+				<h2 className={classes.welcomeMessage}>Create an account</h2>
+				<form onSubmit={registerHandler}>
+					<label htmlFor="email">Email</label>
+					<input
+						type="email"
+						name="email"
+						id="email"
+						value={email}
+						onChange={(event) => {
+							setEmail(event.target.value);
+						}}
+						required
+					></input>
+					<label htmlFor="name">Username</label>
+					<input
+						type="text"
+						name="name"
+						id="name"
+						value={name}
+						onChange={(event) => setName(event.target.value)}
+						required
+					></input>
+					<label htmlFor="password">password</label>
+					<input
+						type="password"
+						name="password"
+						id="password"
+						value={password}
+						onChange={(event) => {
+							setPassword(event.target.value);
+						}}
+						required
+					></input>
+					<button type="submit" id="register">
+						Register
+					</button>
+					{error && <p className={classes.error}>{error}</p>}
+					{message && <p className={classes.msg}>{message}</p>}
+					<a href="/login">
+						<p className={classes.alreadyAccount}>
+							Already have an account?
+						</p>
+					</a>
+					<p>
+						By registering you agree to Property Wala's
+						<span>Terms of Service</span> and
+						<span>Privacy Policy</span>.
+					</p>
+				</form>
+			</div>
+		</div>
+	);
 };
 
 export default SignUp;

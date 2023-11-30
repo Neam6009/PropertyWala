@@ -23,7 +23,7 @@ function App() {
         <Route path="/adminControl" element={<AdminControl />} />
         <Route path="/*" element={<h1>Error - Page not found</h1>} />
       </Routes>
-      {/* <Footer/> */}
+      <Footer />
     </BrowserRouter>
   );
 }
