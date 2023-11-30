@@ -11,25 +11,22 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).render('login', {
-        msg: 'Please Enter Your Email and Password',
-        msg_type: 'error',
-      });
+      return res.json({
+        error: 'Please Enter Your Email and Password',
+      })
     }
 
     // check if the user exists
     const user = await userModel.User.findOne({ email: email });
     if (!user) {
-      return res.render('register', {
-        msg: 'Email not registered, register first',
-        msg_type: 'error',
-      });
+      return res.json({
+        error: 'Email not registered, register first',
+      })
     } else {
       if (!(await bcrypt.compare(password, user.password))) {
-        return res.status(401).render('login', {
-          msg: 'Incorrect password!',
-          msg_type: 'error',
-        });
+        return res.json({
+          error: 'Incorrect password!',
+        })
       } else {
         const id = user._id;
         const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -41,7 +38,9 @@ exports.login = async (req, res) => {
           httpOnly: true,
         };
         res.cookie('joes', token, cookieOptions);
-        return res.status(200).redirect('/');
+        return res.status(200).json({
+          user
+        });
       }
     }
   } catch (error) {
@@ -61,19 +60,17 @@ exports.register = async (req, res) => {
     !password.match(numbers) ||
     password.length < 8
   ) {
-    return res.render('register', {
-      msg: 'Password should contain lower case, upper case, number and minimum of length 8',
-      msg_type: 'error',
-    });
+    return res.json({
+      error: 'Password should contain lower case, upper case, number and minimum of length 8',
+    })
   }
   try {
     // check if the user exists
     const user = await userModel.User.findOne({ email: email });
     if (user) {
-      return res.render('register', {
-        msg: 'Email id already Taken',
-        msg_type: 'error',
-      });
+      return res.json({
+        error: 'Email id already Taken',
+      })
     }
   } catch (error) {
     res.status(400).json({ error });
@@ -90,10 +87,9 @@ exports.register = async (req, res) => {
     wishlist: [],
   }).save();
 
-  return res.render('register', {
-    msg: 'User Registration Success, Login now',
-    msg_type: 'good',
-  });
+  return res.status(200).json({
+    msg: 'You have registered now log in',
+  })
 };
 
 exports.isLoggedIn = async (req, res, next) => {
