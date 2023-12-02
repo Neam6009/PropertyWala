@@ -1,234 +1,172 @@
-import { useSelector } from "react-redux";
+import React from "react";
 import classes from "../assets/Styles/adminControl.module.css";
+import { useState, useRef } from "react";
+import JoditEditor from "jodit-react";
+import AdminControlUserCard from "../components/AdminControlUserCard";
 import AdminControlPropertyCard from "../components/AdminControlPropertyCard";
 import AdminControlBlogCard from "../components/AdminControlBlogCard";
-import UserCard from "../components/UserCard";
-import { useEffect, useState } from "react";
 
-export default function AdminControl() {
-	const user = useSelector((state) => state.auth.user);
-	const [properties, setProperties] = useState([]);
-	const [blogs, setBlogs] = useState([]);
-	const [users, setUsers] = useState([]);
-	const [selected, setSelected] = useState(0);
+const AdminControl = () => {
+  const [AcType, setAcType] = useState(1);
 
-	useEffect(() => {}, []);
-	const [selectedItem, setSelectedItem] = useState();
+  const AdminControlTypeHandler = (type) => {
+    setAcType(type);
+  };
 
-	// const [selectedItem, setSelectedItem] = useState(
-	// 	<div id="option0Data">
-	// 		<section>
-	// 			<h2>{user.name}</h2>
-	// 			<div className="card__handle">
-	// 				<span className="handle">{user.email}</span>
-	// 			</div>
-	// 			<form action="/allMail" method="post" className="aform">
-	// 				<label htmlFor="subject"></label>
-	// 				<input
-	// 					type="text"
-	// 					placeholder="Enter subject"
-	// 					name="subject"
-	// 				/>
-	// 				<div className="content">
-	// 					<textarea
-	// 						name="content"
-	// 						id="froala1"
-	// 						cols="300"
-	// 						rows="100"
-	// 						required
-	// 					></textarea>
-	// 				</div>
-	// 				<button id="BfButton1" type="submit">
-	// 					Mail all users
-	// 				</button>
-	// 			</form>
-	// 		</section>
-	// 	</div>
-	// );
+  //Jodit editor settings
+  const editor = useRef(null);
+  const [content, setContent] = useState("");
+  const config = {
+    readonly: false,
+    placeholder: "Compose your Blog...",
+    toolbarButtonSize: "small",
+    minHeight: 300,
+    buttons: [
+      "source",
+      "|",
+      "bold",
+      "italic",
+      "underline",
+      "strikethrough",
+      "|",
+      "superscript",
+      "subscript",
+      "|",
+      "ul",
+      "ol",
+      "|",
+      "outdent",
+      "indent",
+      "|",
+      "font",
+      "fontsize",
+      "brush",
+      "|",
+      "selectall",
+      "align",
+      "undo",
+      "redo",
+      "cut",
+      "hr",
+      "eraser",
+      "table",
+      "|",
+      "link",
+      "unlink",
+      "|",
+      "fullsize",
+      "|",
+      "print",
+      "about",
+    ],
+  };
 
-	useEffect(() => {
-		if (selected == 1) {
-			setSelectedItem(
-				<div id="option1Data" className="display_none">
-					<section>
-						{properties.map((property) => {
-							<div style="margin:1rem 0;">
-								<AdminControlPropertyCard property={property} />
-							</div>;
-						})}
-					</section>
-				</div>
-			);
-		}
+  let AcContent = <></>;
 
-		if (selected == 2) {
-			setSelectedItem(
-				<div id="option2Data" className="display_none">
-					<section>
-						{users.map((user) => {
-							<div style="margin:1rem 0;">
-								<UserCard user={user} />
-							</div>;
-						})}
-					</section>
-				</div>
-			);
-		}
+  const AcContent1 = (
+    <>
+      <div className={classes.homeContent}>
+        <h2>User</h2>
+        <p>userEmail@gmail.com</p>
+      </div>
+      <div className={classes.adminForm}>
+        <form action="/allMail" method="post" className={classes.aform}>
+          <label htmlFor="subject"></label>
+          <input type="text" placeholder="Enter subject" name="subject" />
+          <div className={classes.content}>
+            <JoditEditor
+              className={classes.Jeditor}
+              ref={editor}
+              value={content}
+              config={config}
+              onBlur={(newContent) => setContent(newContent)}
+            />
+          </div>
+          <button id="BfButton1" type="submit" className={classes.abutton}>
+            Mail all users
+          </button>
+        </form>
+      </div>
+    </>
+  );
 
-		if (selected == 3) {
-			setSelectedItem(
-				<div id="option3Data" className="display_none">
-					<section>
-						{blogs.map((blog) => {
-							<div style="margin:1rem 0;">
-								<AdminControlBlogCard blog={blog} />
-							</div>;
-						})}
-					</section>
-				</div>
-			);
-		}
-	}, [selected]);
+  const AcContent2 = (
+    <>
+      <div className={classes.usersContent}>
+        <AdminControlUserCard />
+      </div>
+    </>
+  );
 
-	console.log(selectedItem);
+  const AcContent3 = (
+    <>
+      <div className={classes.propertiesContent}>
+        <AdminControlPropertyCard />
+      </div>
+    </>
+  );
 
-	return (
-		<div>
-			<nav>
-				<ul className={classes.navLinks}>
-					<li onClick={() => setSelected(0)}>Home</li>
-					<li onClick={() => setSelected(1)}>Properties</li>
-					<li onClick={() => setSelected(2)}>Users</li>
-					<li onClick={() => setSelected(3)}>Blogs</li>
-				</ul>
-			</nav>
+  const AcContent4 = (
+    <>
+      <div className={classes.blogsContent}>
+        <AdminControlBlogCard />
+      </div>
+    </>
+  );
 
-			{selectedItem}
-		</div>
-	);
-}
+  switch (AcType) {
+    case 1:
+      AcContent = AcContent1;
+      break;
+    case 2:
+      AcContent = AcContent2;
+      break;
+    case 3:
+      AcContent = AcContent3;
+      break;
+    case 4:
+      AcContent = AcContent4;
+      break;
 
-{
-	/* 
+    default:
+      break;
+  }
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Controls</title>
-    <link href="/Styles/main.css" rel="stylesheet" type="text/css" />
-    <link href="/Styles/profile.css" rel="stylesheet" type="text/css" />
-    <link href="/Styles/adminControl.css" rel="stylesheet" type="text/css" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/froala-editor@3.2.6/css/froala_editor.pkgd.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/froala-editor@3.2.6/js/froala_editor.pkgd.min.js"
-    ></script>
-  </head>
+  return (
+    <div className={classes.AdminControlall}>
+      <div className={classes.ACNavBar}>
+        <p
+          onClick={() => {
+            AdminControlTypeHandler(1);
+          }}
+        >
+          Home
+        </p>
+        <p
+          onClick={() => {
+            AdminControlTypeHandler(2);
+          }}
+        >
+          Users
+        </p>
+        <p
+          onClick={() => {
+            AdminControlTypeHandler(3);
+          }}
+        >
+          Properties
+        </p>
+        <p
+          onClick={() => {
+            AdminControlTypeHandler(4);
+          }}
+        >
+          Blogs
+        </p>
+      </div>
+      <div className={classes.AcContentContainer}>{AcContent}</div>
+    </div>
+  );
+};
 
-  <body>
-    <%- include('navbar',user) %>
-    <main>
-
-        <nav>
-          <ul class="navlinks">
-            <li class="link__item selected" onclick="changeData(0)">Home</li>
-            <li class="link__item" onclick="changeData(1)">Properties</li>
-            <li class="link__item" onclick="changeData(2)">Users</li>
-            <li class="link__item" onclick="changeData(3)">Blogs</li>
-          </ul>
-        </nav>
-    
-        <div id="option0Data">
-          <section>
-            <h2><%= user.name %></h2>
-            <div class="card__handle">
-              <span class="handle"><%= user.email %></span>
-            </div>
-            <form action="/allMail" method="post" class="aform">
-              <label for="subject"></label>
-              <input type="text" placeholder="Enter subject" name="subject">
-              <div class="content">
-                <textarea name="content" id="froala1" cols="300" rows="100" required >
-                </textarea>
-            </div>
-            <button id="BfButton1" type="submit">Mail all users</button>
-            </form>
-          </section>
-        </div>
-    
-        <div id="option1Data" class="display_none">
-          <section>
-            <% for(let j = 0; j<properties.length;j++){ %>
-            <div style="margin:1rem 0;"><%- include('adminControlPropertyCard',{property:properties[j]}); %></div>
-            <% } %>
-          </section>
-        </div>
-    
-        <div id="option2Data" class="display_none">
-            <section>
-                <% for(let j = 0; j<users.length;j++){ %>
-                <div style="margin:1rem 0;"><%- include('userCard',{user:users[j]}); %></div>
-                <% } %>
-            </section>
-        </div>
-    
-        <div id="option3Data" class="display_none">
-          <section>
-            <% for(let i = 0 ; i < blogs.length; i++){ %>
-              <%- include('adminContol_blogCard',{blog : blogs[i]})%>
-            <%}%>
-          </section>
-        </div>
-    </main>
-
-    <%- include('footer') %>
-  </body>
-  <script>
-    function changeData(selectedOption) {
-      if (selectedOption === 0) {
-        addClass(0);
-      } else if (selectedOption === 1) {
-        addClass(1);
-      } else if (selectedOption === 2) {
-        addClass(2);
-      } else if (selectedOption === 3) {
-        addClass(3);
-      }
-    }
-    const options = document.querySelectorAll('.link__item');
-
-    function addClass(option) {
-      for (let i = 0; i < 4; i++) {
-        if (option == i) {
-          document.getElementById(`option${i}Data`).classList.remove('display_none');
-          options[i].classList.add('selected');
-        } else {
-          document.getElementById(`option${i}Data`).classList.add('display_none');
-          options[i].classList.remove('selected');
-        }
-      }
-    }
-  </script>
-  <script>
-    var editor = new FroalaEditor('#froala1', {
-        toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'color', 'emoticons', 'insertLink', 'insertTable', 'undo', 'redo', 'fullscreen'],
-        pluginsEnabled: ['image', 'link', 'table', 'colors', 'emoticons', 'fontSize'],
-        heightMin: 200,
-        heightMax: 300,
-        placeholderText:'Mail Content...',
-        fontSize: {
-          selection: true,
-          defaultSelection: '20',
-          options: ['8', '10', '12', '14', '16', '18', '20', '24', '30']
-        }
-      });
-</script>
-</html> */
-}
+export default AdminControl;
