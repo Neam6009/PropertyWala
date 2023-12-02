@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import classes from "../assets/Styles/index.module.css";
 import PropertyCard from "../components/PropertyCard.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,9 +9,11 @@ import s3I1 from "../assets/images/PW_S3_icon1.png";
 import s3I2 from "../assets/images/PW_S3_icon2.png";
 import s3I3 from "../assets/images/PW_S3_icon3.png";
 import pIcons from "../assets/images/PW_peopleIcons.png";
+import RbsTabs from "../components/RbsTabs.jsx";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/auth/authSlice.js";
+import { useEffect } from "react";
 
 const Home = () => {
 	const user = useSelector((state) => state.auth.user);
@@ -21,7 +23,7 @@ const Home = () => {
 		const fetchUser = async () => {
 			try {
 				const response = await fetch(
-					"http://localhost:3000/auth/verify",
+					"http://localhost:3003/auth/verify",
 					{
 						method: "GET",
 						credentials: "include",
@@ -46,9 +48,8 @@ const Home = () => {
 	}, []);
 
 	return (
-		<>
+		<div className={classes.all}>
 			<header>
-				{user && <h1>{user.email}</h1>}
 				<div className={classes.HeroBackground}>
 					<div className={classes.headerPart1}>
 						<div className={classes.heroSlogan}>
@@ -77,100 +78,38 @@ const Home = () => {
 							/>
 						</div>
 					</div>
-					<div className={classes.headerPart2}>
-						<div className={classes.rbsTabs}>
-							<div className={classes.rbsNav}>
-								<div
-									className={`${classes.rbsOption} ${classes.rbsSelected}`}
-								>
-									Rent
-								</div>
-								<div className={classes.rbsOption}>Buy</div>
-								<div className={classes.rbsOption}>Sell</div>
-							</div>
-							<div className={classes.rbsInfoMobile}>
-								<div className={classes.rbsRS}>
-									<input
-										type="text"
-										placeholder="Search properties.."
-									/>
-									<button>
-										<FontAwesomeIcon
-											icon={faMagnifyingGlass}
-										/>
-									</button>
-								</div>
-								<div className={classes.rbsSell}>
-									<a href="#" target="_blank">
-										<button>
-											List your property{" "}
-											<i className="fa-sharp fa-solid fa-arrow-up-right-from-square"></i>
-										</button>
-									</a>
-								</div>
-							</div>
-							<div className={classes.rbsInfoExtended}>
-								<form className={classes.rbsInfo1}>
-									<div>
-										<p className={classes.greyText1}>
-											Location
-										</p>
-										<input
-											id="locationRent"
-											type="text"
-											name="location"
-											value="Mumbai"
-										/>
-									</div>
-									<span className={classes.rbsSpan}>|</span>
-									<div>
-										<p className={classes.greyText1}>
-											When
-										</p>
-										<input
-											type="date"
-											name="dateTime"
-											id=""
-										/>
-									</div>
-									<span className={classes.rbsSpan}>|</span>
-									<button type="button">
-										Search Properties
-									</button>
-								</form>
-								<form className={classes.rbsInfo2}>
-									<div>
-										<p className={classes.greyText1}>
-											Location
-										</p>
-										<input
-											id="locationBuy"
-											type="text"
-											name="location"
-											value="Mumbai"
-										/>
-									</div>
-									<span className={classes.rbsSpan}>|</span>
-									<div>
-										<p className={classes.greyText1}>
-											When
-										</p>
-										<input type="date" name="dateTime" />
-									</div>
-									<span className={classes.rbsSpan}>|</span>
-									<button type="button">
-										Search Properties
-									</button>
-								</form>
-								<div className={classes.rbsInfo3}>
-									<p>
-										Increase the reach of your property and
-										get higher bids!
-									</p>
-								</div>
-							</div>
+					<RbsTabs />
+				</div>
+
+				<div className={classes.HeroBackground}>
+					<div className={classes.headerPart1}>
+						<div className={classes.heroSlogan}>
+							<h1 className={classes.heroText}>
+								Searching for your dream property?
+							</h1>
+							<p className={classes.heroDesc}>
+								Look no further than PropertyWala
+							</p>
+							<p className={classes.heroDesc}>
+								- your gateway to a world of real estate
+								possibilities!
+							</p>
+						</div>
+						<div className={classes.heroPropertyCard}>
+							<PropertyCard
+								property={{
+									price: "price",
+									type: "rent",
+									propertyName: "name",
+									location: "City",
+									area: "area",
+									bedsNum: "beds",
+									bathsNum: "baths",
+								}}
+							/>
 						</div>
 					</div>
+					<RbsTabs />
 
 					<div className={classes.p2}>
 						<div className={classes.propertyNumbers}>
@@ -300,25 +239,6 @@ const Home = () => {
 				</div>
 			</div>
 
-			<div className={classes.Testimonial}>
-				<h1>Testimonials</h1>
-				<p className={classes.greyText}>
-					See the opinions of our property managers, landlords, and
-					tenants.
-				</p>
-				<p>
-					` "I use PropertyWala practically every day to hunt for a
-					second home, a vacation condo, or just to browse fantasy
-					homes in different regions. Thank you, PropertyWala, for the
-					enjoyable home searching and analysis! "`
-				</p>
-				<span>
-					<b>Ram,</b>
-					<span className={classes.greyText}>Renter</span>
-				</span>
-				<img src={pIcons} alt="peopleIcons" />
-			</div>
-
 			<div className={classes.clientEmail}>
 				<div>
 					<h1 style={{ color: "white" }}>Are you a landllord?</h1>
@@ -345,7 +265,7 @@ const Home = () => {
 					Join 6000+ other landlords in our propertyWala community.
 				</span>
 			</div>
-		</>
+		</div>
 	);
 };
 

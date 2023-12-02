@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Allura&family=Smooch&display=swap");
+
 .HeroBackground {
   padding: 0 1rem;
 }
@@ -20,12 +22,20 @@
   margin: 1rem 0;
   font-size: 3rem;
   color: #000929;
+
   text-align: center;
 }
 
+.rbsIm {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  width: 30rem;
+}
+
 .heroDesc {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   color: #353b56;
+
   font-weight: bold;
   text-align: center;
 }
@@ -268,9 +278,11 @@
   }
   .HeroBackground {
     background-image: url("../images/PW_map_background.png");
+    margin: 0;
+    border: 0;
     background-repeat: no-repeat;
     background-size: cover;
-    padding: 0 1rem;
+    padding: 1rem;
     gap: 2rem;
   }
 
