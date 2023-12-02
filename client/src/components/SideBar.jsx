@@ -86,6 +86,16 @@ function Sidebar() {
           <button className={styles.sidebarButton}>P</button>
           <HoverText text="Premium" top={9} />
         </Link>
+
+        <Link className={styles.sidebarLink} to="/compose-blog">
+          <button className={styles.sidebarButton}>C</button>
+          <HoverText text="Compose" top={10} />
+        </Link>
+
+        <Link className={styles.sidebarLink} to="/admin-control">
+          <button className={styles.sidebarButton}>AD</button>
+          <HoverText text="Admin Controls" top={11} />
+        </Link>
       </div>
     </div>
   );
@@ -134,6 +144,14 @@ function Sidebar() {
 
         <Link className={styles.sidebarLink} to="/pricing-plans">
           <button className={styles.sidebarButton}>Premium</button>
+        </Link>
+
+        <Link className={styles.sidebarLink} to="/compose-blog">
+          <button className={styles.sidebarButton}>Compose</button>
+        </Link>
+
+        <Link className={styles.sidebarLink} to="/admin-control">
+          <button className={styles.sidebarButton}>Admin Controls</button>
         </Link>
       </div>
     </>
