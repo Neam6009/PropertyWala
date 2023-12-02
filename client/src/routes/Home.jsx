@@ -9,10 +9,11 @@ import s3I1 from "../assets/images/PW_S3_icon1.png";
 import s3I2 from "../assets/images/PW_S3_icon2.png";
 import s3I3 from "../assets/images/PW_S3_icon3.png";
 import pIcons from "../assets/images/PW_peopleIcons.png";
+import RbsTabs from "../components/RbsTabs.jsx";
 
 const Home = () => {
   return (
-    <>
+    <div className={classes.all}>
       <header>
         <div className={classes.HeroBackground}>
           <div className={classes.headerPart1}>
@@ -41,76 +42,7 @@ const Home = () => {
               />
             </div>
           </div>
-          <div className={classes.headerPart2}>
-            <div className={classes.rbsTabs}>
-              <div className={classes.rbsNav}>
-                <div className={`${classes.rbsOption} ${classes.rbsSelected}`}>
-                  Rent
-                </div>
-                <div className={classes.rbsOption}>Buy</div>
-                <div className={classes.rbsOption}>Sell</div>
-              </div>
-              <div className={classes.rbsInfoMobile}>
-                <div className={classes.rbsRS}>
-                  <input type="text" placeholder="Search properties.." />
-                  <button>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                  </button>
-                </div>
-                <div className={classes.rbsSell}>
-                  <a href="#" target="_blank">
-                    <button>
-                      List your property{" "}
-                      <i className="fa-sharp fa-solid fa-arrow-up-right-from-square"></i>
-                    </button>
-                  </a>
-                </div>
-              </div>
-              <div className={classes.rbsInfoExtended}>
-                <form className={classes.rbsInfo1}>
-                  <div>
-                    <p className={classes.greyText1}>Location</p>
-                    <input
-                      id="locationRent"
-                      type="text"
-                      name="location"
-                      value="Mumbai"
-                    />
-                  </div>
-                  <span className={classes.rbsSpan}>|</span>
-                  <div>
-                    <p className={classes.greyText1}>When</p>
-                    <input type="date" name="dateTime" id="" />
-                  </div>
-                  <span className={classes.rbsSpan}>|</span>
-                  <button type="button">Search Properties</button>
-                </form>
-                <form className={classes.rbsInfo2}>
-                  <div>
-                    <p className={classes.greyText1}>Location</p>
-                    <input
-                      id="locationBuy"
-                      type="text"
-                      name="location"
-                      value="Mumbai"
-                    />
-                  </div>
-                  <span className={classes.rbsSpan}>|</span>
-                  <div>
-                    <p className={classes.greyText1}>When</p>
-                    <input type="date" name="dateTime" />
-                  </div>
-                  <span className={classes.rbsSpan}>|</span>
-                  <button type="button">Search Properties</button>
-                </form>
-                <div className={classes.rbsInfo3}>
-                  <p>
-                    Increase the reach of your property and get higher bids!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RbsTabs />
 
           <div className={classes.p2}>
             <div className={classes.propertyNumbers}>
@@ -267,7 +199,7 @@ const Home = () => {
           Join 6000+ other landlords in our propertyWala community.
         </span>
       </div>
-    </>
+    </div>
   );
 };
 

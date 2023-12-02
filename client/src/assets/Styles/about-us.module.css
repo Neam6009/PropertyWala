@@ -1,4 +1,4 @@
-* {
+.all {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -21,7 +21,7 @@ img {
   gap: 2rem;
 }
 
-.parent-container {
+.parentContainer {
   display: flex;
   gap: 1rem;
   flex-direction: column;
@@ -29,19 +29,19 @@ img {
   justify-content: space-between;
 }
 
-.child-container {
+.childContainer {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 }
 
-.content-container {
+.contentContainer {
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
 }
 
-section .content-container {
+section .contentContainer {
   gap: 2rem;
 }
 
@@ -54,7 +54,7 @@ section .content-container {
   font-weight: bold;
 }
 
-.coloured-text {
+.colouredText {
   color: #7164f0;
 }
 
@@ -166,20 +166,20 @@ section .split img {
     padding-left: 3rem;
   }
 
-  .parent-container {
+  .parentContainer {
     display: flex;
     gap: 1rem;
     flex-direction: row;
     justify-content: center;
   }
 
-  .content-container {
+  .contentContainer {
     padding: 2rem;
     justify-content: center;
     align-items: center;
   }
 
-  .image-container {
+  .imageContainer {
     padding: 0;
   }
 
@@ -188,7 +188,7 @@ section .split img {
     font-weight: normal;
   }
 
-  section .content-container {
+  section .contentContainer {
     gap: 1rem;
     max-width: 50%;
   }
@@ -211,7 +211,7 @@ section .split img {
     max-width: 50%;
   }
 
-  .newsletter .content-container {
+  .newsletter .contentContainer {
     width: 50%;
   }
 }
