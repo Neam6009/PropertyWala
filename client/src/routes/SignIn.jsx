@@ -17,6 +17,7 @@ const SignIn = () => {
 
     console.log(email, password);
 
+<<<<<<< HEAD
     try {
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
@@ -26,6 +27,17 @@ const SignIn = () => {
         },
         body: JSON.stringify({ email, password }),
       });
+=======
+		try {
+			const response = await fetch("http://localhost:3003/auth/login", {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email, password }),
+			});
+>>>>>>> 9cd55c1f52c06a274f8a2c8f1903086f55e8905a
 
       const data = await response.json();
       if (data.user) {

@@ -19,13 +19,16 @@ const Home = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/auth/verify", {
-          method: "GET",
-          credentials: "include",
-        });
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const response = await fetch(
+					"http://localhost:3003/auth/verify",
+					{
+						method: "GET",
+						credentials: "include",
+					}
+				);
 
         const data = await response.json();
         if (data.user) {
@@ -44,10 +47,69 @@ const Home = () => {
     fetchUser();
   }, []);
 
-  return (
-    <div className={classes.all}>
-      <header>
-        {user && <h1>{user.email}</h1>}
+	return (
+		<div className={classes.all}>
+			<header>
+				<div className={classes.HeroBackground}>
+					<div className={classes.headerPart1}>
+						<div className={classes.heroSlogan}>
+							<h1 className={classes.heroText}>
+								Searching for your dream property?
+							</h1>
+							<p className={classes.heroDesc}>
+								Look no further than PropertyWala
+							</p>
+							<p className={classes.heroDesc}>
+								- your gateway to a world of real estate
+								possibilities!
+							</p>
+						</div>
+						<div className={classes.heroPropertyCard}>
+							<PropertyCard
+								property={{
+									price: "price",
+									type: "rent",
+									propertyName: "name",
+									location: "City",
+									area: "area",
+									bedsNum: "beds",
+									bathsNum: "baths",
+								}}
+							/>
+						</div>
+					</div>
+					<RbsTabs />
+				</div>
+
+				<div className={classes.HeroBackground}>
+					<div className={classes.headerPart1}>
+						<div className={classes.heroSlogan}>
+							<h1 className={classes.heroText}>
+								Searching for your dream property?
+							</h1>
+							<p className={classes.heroDesc}>
+								Look no further than PropertyWala
+							</p>
+							<p className={classes.heroDesc}>
+								- your gateway to a world of real estate
+								possibilities!
+							</p>
+						</div>
+						<div className={classes.heroPropertyCard}>
+							<PropertyCard
+								property={{
+									price: "price",
+									type: "rent",
+									propertyName: "name",
+									location: "City",
+									area: "area",
+									bedsNum: "beds",
+									bathsNum: "baths",
+								}}
+							/>
+						</div>
+					</div>
+					<RbsTabs />
 
         <div className={classes.HeroBackground}>
           <div className={classes.headerPart1}>
@@ -181,60 +243,34 @@ const Home = () => {
           Some of the chosen properties in your area.
         </p>
 
-        <div className={classes.container}>
-          <div className={classes.row}>
-            <p className={classes.s2Hero}>Based on your location</p>
-            <div className={classes.col}></div>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.Testimonial}>
-        <h1>Testimonials</h1>
-        <p className={classes.greyText}>
-          See the opinions of our property managers, landlords, and tenants.
-        </p>
-        <p>
-          ` "I use PropertyWala practically every day to hunt for a second home,
-          a vacation condo, or just to browse fantasy homes in different
-          regions. Thank you, PropertyWala, for the enjoyable home searching and
-          analysis! "`
-        </p>
-        <span>
-          <b>Ram,</b>
-          <span className={classes.greyText}>Renter</span>
-        </span>
-        <img src={pIcons} alt="peopleIcons" />
-      </div>
-
-      <div className={classes.clientEmail}>
-        <div>
-          <h1 style={{ color: "white" }}>Are you a landllord?</h1>
-          <span className={classes.greyText}>
-            Learn how you can raise the value of your house so that it will
-            sell.
-          </span>
-        </div>
-        <div className={classes.emailInputFields}>
-          <input
-            type="text"
-            id="addMail"
-            placeholder="Enter your email address"
-          />
-          <button>Submit</button>
-        </div>
-        <span
-          className={`${classes.display_none} ${classes.greyText}`}
-          id="thanksMessage"
-        >
-          Thank you for signing up for Newsletter
-        </span>
-        <span className={classes.greyText}>
-          Join 6000+ other landlords in our propertyWala community.
-        </span>
-      </div>
-    </div>
-  );
+			<div className={classes.clientEmail}>
+				<div>
+					<h1 style={{ color: "white" }}>Are you a landllord?</h1>
+					<span className={classes.greyText}>
+						Learn how you can raise the value of your house so that
+						it will sell.
+					</span>
+				</div>
+				<div className={classes.emailInputFields}>
+					<input
+						type="text"
+						id="addMail"
+						placeholder="Enter your email address"
+					/>
+					<button>Submit</button>
+				</div>
+				<span
+					className={`${classes.display_none} ${classes.greyText}`}
+					id="thanksMessage"
+				>
+					Thank you for signing up for Newsletter
+				</span>
+				<span className={classes.greyText}>
+					Join 6000+ other landlords in our propertyWala community.
+				</span>
+			</div>
+		</div>
+	);
 };
 
 export default Home;

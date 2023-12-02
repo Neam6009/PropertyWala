@@ -49,6 +49,7 @@ exports.login = async (req, res) => {
     res.status(400).json({ error });
   }
 };
+
 exports.register = async (req, res) => {
   var lowerCaseLetters = /[a-z]/g;
   var upperCaseLetters = /[A-Z]/g;
