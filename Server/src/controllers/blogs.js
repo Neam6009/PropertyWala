@@ -9,8 +9,7 @@ exports.getAllBlogs = async (req, res, next) => {
     await blogModel.Blog.find({}).then((result) => {
       blogArray = result;
     });
-    req.blogs = blogArray;
-    return next();
+    res.status(200).json(blogArray)
   } catch (error) {
     res.status(400).json({ error });
   }
