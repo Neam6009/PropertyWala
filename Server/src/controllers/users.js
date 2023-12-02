@@ -1,45 +1,47 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 
-const mongoose = require('mongoose');
-const userModel = require('../models/user_model');
+const mongoose = require("mongoose");
+const userModel = require("../models/user_model");
 
-mongoose.connect('mongodb://0.0.0.0:27017/FFSD_DB');
+mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.json({
-        error: 'Please Enter Your Email and Password',
-      })
+        error: "Please Enter Your Email and Password",
+      });
     }
 
     // check if the user exists
     const user = await userModel.User.findOne({ email: email });
     if (!user) {
       return res.json({
-        error: 'Email not registered, register first',
-      })
+        error: "Email not registered, register first",
+      });
     } else {
       if (!(await bcrypt.compare(password, user.password))) {
         return res.json({
-          error: 'Incorrect password!',
-        })
+          error: "Incorrect password!",
+        });
       } else {
         const id = user._id;
         const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
           expiresIn: process.env.JWT_EXPIRES_IN,
         });
-        console.log('The Token is ' + token);
+        console.log("The Token is " + token);
         const cookieOptions = {
-          expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+          expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+          ),
           httpOnly: true,
         };
-        res.cookie('joes', token, cookieOptions);
+        res.cookie("joes", token, cookieOptions);
         return res.status(200).json({
-          user
+          user,
         });
       }
     }
@@ -61,16 +63,17 @@ exports.register = async (req, res) => {
     password.length < 8
   ) {
     return res.json({
-      error: 'Password should contain lower case, upper case, number and minimum of length 8',
-    })
+      error:
+        "Password should contain lower case, upper case, number and minimum of length 8",
+    });
   }
   try {
     // check if the user exists
     const user = await userModel.User.findOne({ email: email });
     if (user) {
       return res.json({
-        error: 'Email id already Taken',
-      })
+        error: "Email id already Taken",
+      });
     }
   } catch (error) {
     res.status(400).json({ error });
@@ -88,35 +91,41 @@ exports.register = async (req, res) => {
   }).save();
 
   return res.status(200).json({
-    msg: 'You have registered now log in',
-  })
+    msg: "You have registered now log in",
+  });
 };
 
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.joes) {
     try {
-      const decode = await promisify(jwt.verify)(req.cookies.joes, process.env.JWT_SECRET);
+      const decode = await promisify(jwt.verify)(
+        req.cookies.joes,
+        process.env.JWT_SECRET
+      );
       const user = await userModel.User.findOne({ _id: decode.id });
       if (!user) {
-        return next();
+        return res.json({
+          error: "No user logged in",
+        });
       }
-      req.user = user;
-      return next();
+      return res.status(200).json({
+        user,
+      });
     } catch (error) {
       console.log(error);
-      return next();
+      res.status(400).json({ error });
     }
   } else {
-    next();
+    return;
   }
 };
 
 exports.logout = async (req, res) => {
-  res.cookie('joes', 'logout', {
+  res.cookie("joes", "logout", {
     expires: new Date(Date.now() + 2 * 1000),
     httpOnly: true,
   });
-  res.status(200).redirect('/');
+  res.status(200).redirect("/");
 };
 
 exports.wishlist = async (req, res) => {
@@ -143,7 +152,7 @@ exports.certified = async (req, res) => {
   const userId = req.params.userId;
 
   userModel.User.findById(userId).then((user) => {
-    user.isCertified = change === 'true';
+    user.isCertified = change === "true";
     user.save();
   });
 
@@ -154,7 +163,7 @@ exports.admin = async (req, res) => {
   const userId = req.params.userId;
 
   userModel.User.findById(userId).then((user) => {
-    user.isAdmin = change === 'true';
+    user.isAdmin = change === "true";
     user.save();
   });
 

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import classes from "../assets/Styles/login.module.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
 
 const SignIn = () => {
 	const [error, setError] = useState();
@@ -8,6 +10,7 @@ const SignIn = () => {
 	const [password, setPassword] = useState("");
 
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	const loginHandler = async (event) => {
 		event.preventDefault();
@@ -17,6 +20,7 @@ const SignIn = () => {
 		try {
 			const response = await fetch("http://localhost:3000/auth/login", {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -26,7 +30,7 @@ const SignIn = () => {
 			const data = await response.json();
 			if (data.user) {
 				//set user
-
+				dispatch(setUser(data.user));
 				navigate("/");
 				console.log("Login successful:", data.user);
 			} else {
