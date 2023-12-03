@@ -21,10 +21,42 @@ import TermsOfService from "./routes/TermsOfService";
 import TrustAndSafety from "./routes/TrustAndSafety";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
 import FAQ from "./routes/FAQ";
+import { setUser } from "./features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
 	const [properties, setProperties] = useState([]);
 	const [blogs, setBlogs] = useState([]);
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const response = await fetch(
+					"http://localhost:3003/auth/verify",
+					{
+						method: "GET",
+						credentials: "include",
+					}
+				);
+
+				const data = await response.json();
+				if (data.user) {
+					//set user
+					dispatch(setUser(data.user));
+					console.log("Login successful:", data.user);
+				} else {
+					console.error("Login failed");
+				}
+			} catch (error) {
+				// Handle network errors
+				console.error("Network error:", error);
+			}
+		};
+
+		fetchUser();
+	}, []);
 
 	useEffect(() => {
 		const fetchData = async () => {
