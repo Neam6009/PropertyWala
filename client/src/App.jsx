@@ -81,7 +81,10 @@ function App() {
 							path="/list-property"
 							element={<ListProperty />}
 						/>
-						<Route path="/blogs" element={<Blogs />} />
+						<Route
+							path="/blogs"
+							element={<Blogs blogs={blogs} />}
+						/>
 						<Route path="/compose-blog" element={<ComposeBlog />} />
 						<Route
 							path="/pricing-plans"
