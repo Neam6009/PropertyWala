@@ -18,7 +18,7 @@ const AdminControl = () => {
   const [content, setContent] = useState("");
   const config = {
     readonly: false,
-    placeholder: "Compose your Blog...",
+    placeholder: "Compose your Mail...",
     toolbarButtonSize: "small",
     minHeight: 300,
     buttons: [
@@ -117,12 +117,15 @@ const AdminControl = () => {
   switch (AcType) {
     case 1:
       AcContent = AcContent1;
+
       break;
     case 2:
       AcContent = AcContent2;
+
       break;
     case 3:
       AcContent = AcContent3;
+
       break;
     case 4:
       AcContent = AcContent4;
