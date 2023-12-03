@@ -12,17 +12,17 @@ const SignUp = () => {
 	const registerHandler = async (event) => {
 		event.preventDefault();
 
-		console.log(email, password);
+		console.log(email, name, password);
 
 		try {
 			const response = await fetch(
-				"http://localhost:3000/auth/register",
+				"http://localhost:3003/auth/register",
 				{
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify({ email, password }),
+					body: JSON.stringify({ email, name, password }),
 				}
 			);
 
