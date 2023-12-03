@@ -2,9 +2,11 @@ import React from "react";
 import { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import classes from "../assets/Styles/composeBlog.module.css";
+import { useSelector } from "react-redux";
 
 const ComposeBlog = () => {
 	const [image, setImage] = useState("");
+	const user = useSelector((state) => state.auth.user);
 
 	const editor = useRef(null);
 	const [content, setContent] = useState("");

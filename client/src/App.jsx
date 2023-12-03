@@ -23,6 +23,25 @@ import PrivacyPolicy from "./routes/PrivacyPolicy";
 import FAQ from "./routes/FAQ";
 
 function App() {
+	const [properties, setProperties] = useState([]);
+	const [blogs, setBlogs] = useState([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const properties = await fetch(
+				"http://localhost:3003/properties/all"
+			).then((res) => res.json());
+
+			const blogs = await fetch("http://localhost:3003/blogs/all").then(
+				(res) => res.json
+			);
+
+			setProperties(properties);
+			setBlogs(blogs);
+		};
+		fetchData();
+	}, []);
+
 	return (
 		<div
 			style={{
