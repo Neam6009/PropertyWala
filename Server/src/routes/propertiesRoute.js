@@ -1,6 +1,10 @@
 const express = require('express');
 const propertyController = require('../controllers/properties');
 const router = express.Router();
-router.post('/remove/:id', propertyController.removeProperty);
+
+router.get('property-detail/:id',propertyController.propertyDetails)
+router.get('/all',propertyController.getAllProperties);
 router.get('/user/:id', propertyController.getPropertiesByUser);
+router.get('/show-properties/:type/:location?',propertyController.filteredProperties)
+router.post('/remove/:id', propertyController.removeProperty);
 module.exports = router;
