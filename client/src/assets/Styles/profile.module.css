@@ -1,0 +1,148 @@
+.profileAll {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  margin: 3rem;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  border-radius: 0.5rem;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  gap: 2rem;
+  align-items: center;
+  border-right: rgb(196, 194, 194) solid;
+}
+
+.userPropertyDetails {
+}
+
+.userIcon {
+  background: linear-gradient(45deg, rgb(138, 138, 233), rgb(240, 131, 240));
+  color: white;
+  width: 8rem;
+  height: 8rem;
+  padding: 1rem;
+  border-radius: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  font-size: 5rem;
+}
+
+.userDetailsStats {
+  display: flex;
+  gap: 0.5rem;
+  text-align: center;
+  padding-bottom: 3rem;
+}
+
+.userStatsNumber {
+  font-size: 1.2rem;
+}
+
+.userStatsLabel {
+  font-size: 1rem;
+  color: rgb(169, 180, 242);
+}
+
+.cpButton {
+  padding: 0.7rem;
+  border-radius: 5rem;
+  border: 0;
+  background: linear-gradient(45deg, rgb(251, 102, 251), rgb(129, 129, 230));
+  color: whitesmoke;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  margin-bottom: 1rem;
+  font-size: large;
+  cursor: pointer;
+}
+
+.daButton {
+  padding: 0.7rem;
+  font-size: large;
+  cursor: pointer;
+  border-radius: 5rem;
+  border: 0;
+  background: white;
+  color: grey;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.upNav {
+  padding: 3rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.upNavButton {
+  cursor: pointer;
+  color: grey;
+}
+
+.upNavButton:hover {
+  color: black;
+  scale: 1.1;
+}
+
+.pfContact1 {
+  display: flex;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(45deg, rgb(129, 129, 230), rgb(182, 26, 182));
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.pfContact2 {
+  display: flex;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(45deg, rgb(129, 129, 230), rgb(182, 26, 182));
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.pfContact3 {
+  display: flex;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(45deg, rgb(129, 129, 230), rgb(182, 26, 182));
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.pfContactContainer {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  flex-direction: column;
+  padding-left: 3rem;
+  gap: 4rem;
+  font-size: x-large;
+}
+
+.pfLabel1 {
+  margin-left: 10rem;
+}
+
+.pfLabel2 {
+  margin-left: 13rem;
+}
+.pfLabel3 {
+  margin-left: 7rem;
+}

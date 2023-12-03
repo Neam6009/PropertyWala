@@ -17,40 +17,12 @@ import Sidebar from "./components/SideBar";
 import PricingPlan from "./routes/PricingPlan";
 import Header from "./components/Header";
 import Help from "./routes/Help";
-import { useDispatch } from "react-redux";
-import { setUser } from "./features/auth/authSlice";
+import TermsOfService from "./routes/TermsOfService";
+import TrustAndSafety from "./routes/TrustAndSafety";
+import PrivacyPolicy from "./routes/PrivacyPolicy";
+import FAQ from "./routes/FAQ";
 
 function App() {
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const response = await fetch(
-					"http://localhost:3003/auth/verify",
-					{
-						method: "GET",
-						credentials: "include",
-					}
-				);
-
-				const data = await response.json();
-				if (data.user) {
-					//set user
-					dispatch(setUser(data.user));
-					console.log("Login successful:", data.user);
-				} else {
-					console.error("Login failed");
-				}
-			} catch (error) {
-				// Handle network errors
-				console.error("Network error:", error);
-			}
-		};
-
-		fetchUser();
-	}, []);
-
 	return (
 		<div
 			style={{
@@ -97,6 +69,19 @@ function App() {
 							element={<PricingPlan />}
 						/>
 						<Route path="/help" element={<Help />} />
+						<Route path="/FAQ" element={<FAQ />} />
+						<Route
+							path="/privacy-policy"
+							element={<PrivacyPolicy />}
+						/>
+						<Route
+							path="/trust-and-safety"
+							element={<TrustAndSafety />}
+						/>
+						<Route
+							path="/terms-of-service"
+							element={<TermsOfService />}
+						/>
 						<Route
 							path="/admin-control"
 							element={<AdminControl />}

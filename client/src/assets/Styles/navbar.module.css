@@ -60,3 +60,29 @@
 .navSignup:hover {
   background-color: #6454f1;
 }
+
+.userProfile {
+  display: flex;
+  gap: 1rem;
+}
+
+.icon {
+  text-decoration: none;
+  display: flex;
+  color: white;
+  background: linear-gradient(45deg, rgb(146, 146, 231), rgb(191, 0, 255));
+  border-radius: 50%;
+  width: 2.7rem;
+  height: 2.7rem;
+  align-items: center;
+  justify-content: center;
+  font-size: large;
+}
+
+.navUserName {
+  font-size: large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
