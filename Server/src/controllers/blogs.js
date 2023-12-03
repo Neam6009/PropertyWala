@@ -1,40 +1,50 @@
-const mongoose = require('mongoose');
-const blogModel = require('../models/blog_model');
+const mongoose = require("mongoose");
+const blogModel = require("../models/blog_model");
 
-mongoose.connect('mongodb://0.0.0.0:27017/FFSD_DB');
+mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
-exports.getAllBlogs = async (req, res, next) => {
-  try {
-    let blogArray = [];
-    await blogModel.Blog.find({}).then((result) => {
-      blogArray = result;
-    });
-    res.status(200).json(blogArray)
-  } catch (error) {
-    res.status(400).json({ error });
-  }
+exports.getAllBlogs = async (req, res) => {
+	try {
+		let blogArray = [];
+		await blogModel.Blog.find({}).then((result) => {
+			blogArray = result;
+		});
+		res.status(200).json(blogArray);
+	} catch (error) {
+		res.status(400).json({ error });
+	}
 };
 
-exports.getBlogBy_id = async (Blog_id) => {
-  let t = await blogModel.Blog.findById(Blog_id);
-
-  return t;
+exports.getBlogBy_id = async (req, res) => {
+	try {
+		const blog_id = req.params.id;
+		let blog = await blogModel.Blog.findById(blog_jd);
+		res.status(200).json(blog);
+	} catch (error) {
+		res.status(400).json({ error });
+	}
 };
 
-exports.insertBlog = async (req, res, Blog, newImage, user) => {
-  let today = new Date();
-  let day = today.toLocaleDateString('en-IN', { dateStyle: 'long' });
-  await blogModel.Blog.create({
-    title: Blog.blogTitle,
-    content: Blog.blogContent,
-    blogAuthor: user.name,
-    blog_user_id: user._id,
-    date: day,
-    blogImage: newImage,
-  });
+exports.insertBlog = async (req, res) => {
+	const blog = req.body.blog;
+	const image = req.body.image;
+	const user = req.body.user;
+
+	let today = new Date();
+	let day = today.toLocaleDateString("en-IN", { dateStyle: "long" });
+	await blogModel.Blog.create({
+		title: blog.blogTitle,
+		content: blog.blogContent,
+		blogAuthor: user.name,
+		blog_user_id: user._id,
+		date: day,
+		blogImage: image,
+	});
 };
 
 exports.removeBlog = async (req, res) => {
-  const blog_id = req.params.id;
-  blogModel.Blog.deleteOne({ _id: blog_id }).then(() => console.log('deleted Blog'));
+	const blog_id = req.params.id;
+	blogModel.Blog.deleteOne({ _id: blog_id }).then(() =>
+		console.log("Blog deleted")
+	);
 };

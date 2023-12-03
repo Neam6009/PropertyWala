@@ -47,8 +47,9 @@ exports.propertyDetails = async (req, res) => {
 
 exports.insertProperty = async (req, res) => {
 	const property = req.body.property;
-	const images = req.body.images;
 	const user_id = req.body.user_id;
+	const images = req.body.images;
+	console.log(images);
 
 	await propertyModel.Property.create({
 		name: property.propertyName,

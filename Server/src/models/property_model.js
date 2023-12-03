@@ -11,10 +11,6 @@ const listerSchema = new mongoose.Schema({
 	email: String,
 });
 
-const imageSchema = new mongoose.Schema({
-	imageUrl: String,
-});
-
 const propertySchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -33,7 +29,7 @@ const propertySchema = new mongoose.Schema({
 	purpose: String,
 	description: String,
 	parkingArea: String,
-	propertyImage: [imageSchema],
+	propertyImage: [String],
 	propertyType: String,
 	certified: String,
 	yearBuilt: {
