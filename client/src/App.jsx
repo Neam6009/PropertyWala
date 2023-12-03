@@ -17,6 +17,10 @@ import Sidebar from "./components/SideBar";
 import PricingPlan from "./routes/PricingPlan";
 import Header from "./components/Header";
 import Help from "./routes/Help";
+import TermsOfService from "./routes/TermsOfService";
+import TrustAndSafety from "./routes/TrustAndSafety";
+import PrivacyPolicy from "./routes/PrivacyPolicy";
+import FAQ from "./routes/FAQ";
 
 function App() {
   return (
@@ -56,6 +60,10 @@ function App() {
             <Route path="/compose-blog" element={<ComposeBlog />} />
             <Route path="/pricing-plans" element={<PricingPlan />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/FAQ" element={<FAQ />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/trust-and-safety" element={<TrustAndSafety />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/admin-control" element={<AdminControl />} />
             <Route path="/*" element={<h1>Error - Page not found</h1>} />
           </Routes>

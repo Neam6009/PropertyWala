@@ -1,16 +1,16 @@
-import React from 'react';
-import classes from '../assets/styles/footer.module.css';
-import { Link } from 'react-router-dom';
-import { AiOutlineInstagram } from 'react-icons/ai';
-import { AiFillLinkedin } from 'react-icons/ai';
-import { FaTwitter } from 'react-icons/fa';
-import { FaFacebookF } from 'react-icons/fa';
+import React from "react";
+import classes from "../assets/styles/footer.module.css";
+import { Link } from "react-router-dom";
+import { AiOutlineInstagram } from "react-icons/ai";
+import { AiFillLinkedin } from "react-icons/ai";
+import { FaTwitter } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <>
       <footer className={classes.homeFooter}>
-        <Link className={classes.logo} href="../src/index.html">
+        <Link className={classes.logo} to="../src/index.html">
           PropertyWala
         </Link>
         <div className={classes.wrapper}>
@@ -40,13 +40,13 @@ const Footer = () => {
             <div className={classes.notShow}></div>
             <div className={classes.footerSection}>
               <h5>TERMS & PRIVACY</h5>
-              <Link href="/trust-and-safety">
+              <Link to="/trust-and-safety">
                 <p>Trust & Safety</p>
               </Link>
-              <Link href="terms-of-service">
+              <Link to="terms-of-service">
                 <p>Terms of Service</p>
               </Link>
-              <Link href="privacy-policy">
+              <Link to="privacy-policy">
                 <p>Privacy Policy</p>
               </Link>
             </div>
@@ -59,16 +59,16 @@ const Footer = () => {
             </div>
             <div className={classes.footerSection}>
               <h5>RESOURCES</h5>
-              <Link href="/blogs">
+              <Link to="/blogs">
                 <p>Blog</p>
               </Link>
-              <Link href="/help">
+              <Link to="/help">
                 <p>Guides</p>
               </Link>
-              <Link href="/FAQ">
+              <Link to="/FAQ">
                 <p>FAQ</p>
               </Link>
-              <Link href="/help">
+              <Link to="/help">
                 <p>Help Center</p>
               </Link>
             </div>
