@@ -5,7 +5,6 @@ const { compareSync } = require("bcryptjs");
 mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
 exports.getAllProperties = async (req, res, next) => {
-	console.log("jfkldj");
 	try {
 		let propertyArray = await propertyModel.Property.find({});
 

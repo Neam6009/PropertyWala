@@ -11,41 +11,9 @@ import s3I3 from "../assets/images/PW_S3_icon3.png";
 import pIcons from "../assets/images/PW_peopleIcons.png";
 import RbsTabs from "../components/RbsTabs.jsx";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { setUser } from "../features/auth/authSlice.js";
-import { useEffect } from "react";
 
 const Home = () => {
 	const user = useSelector((state) => state.auth.user);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const response = await fetch(
-					"http://localhost:3003/auth/verify",
-					{
-						method: "GET",
-						credentials: "include",
-					}
-				);
-
-				const data = await response.json();
-				if (data.user) {
-					//set user
-					dispatch(setUser(data.user));
-					console.log("Login successful:", data.user);
-				} else {
-					console.error("Login failed");
-				}
-			} catch (error) {
-				// Handle network errors
-				console.error("Network error:", error);
-			}
-		};
-
-		fetchUser();
-	}, []);
 
 	return (
 		<div className={classes.all}>

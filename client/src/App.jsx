@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
@@ -17,53 +17,100 @@ import Sidebar from "./components/SideBar";
 import PricingPlan from "./routes/PricingPlan";
 import Header from "./components/Header";
 import Help from "./routes/Help";
+import { useDispatch } from "react-redux";
+import { setUser } from "./features/auth/authSlice";
 
 function App() {
-  return (
-    <div
-      style={{
-        margin: 0,
-        padding: 0,
-        border: 0,
-        boxSizing: "border-box",
-      }}
-    >
-      <BrowserRouter>
-        <Navbar />
-        <Sidebar />
-        <div style={{ marginLeft: "4rem" }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/show-properties"
-              element={<ShowProperties type={"all"} />}
-            />
-            <Route
-              path="/show-properties/rent"
-              element={<ShowProperties type={"rent"} />}
-            />
-            <Route
-              path="/show-properties/sale"
-              element={<ShowProperties type={"sale"} />}
-            />
-            <Route path="/about-us" element={<About />} />
-            <Route path="/login" element={<SignIn />} />
-            <Route path="/register" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/adminControl" element={<AdminControl />} />
-            <Route path="/list-property" element={<ListProperty />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/compose-blog" element={<ComposeBlog />} />
-            <Route path="/pricing-plans" element={<PricingPlan />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/admin-control" element={<AdminControl />} />
-            <Route path="/*" element={<h1>Error - Page not found</h1>} />
-          </Routes>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </div>
-  );
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const response = await fetch(
+					"http://localhost:3003/auth/verify",
+					{
+						method: "GET",
+						credentials: "include",
+					}
+				);
+
+				const data = await response.json();
+				if (data.user) {
+					//set user
+					dispatch(setUser(data.user));
+					console.log("Login successful:", data.user);
+				} else {
+					console.error("Login failed");
+				}
+			} catch (error) {
+				// Handle network errors
+				console.error("Network error:", error);
+			}
+		};
+
+		fetchUser();
+	}, []);
+
+	return (
+		<div
+			style={{
+				margin: 0,
+				padding: 0,
+				border: 0,
+				boxSizing: "border-box",
+			}}
+		>
+			<BrowserRouter>
+				<Navbar />
+				<Sidebar />
+				<div style={{ marginLeft: "4rem" }}>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route
+							path="/show-properties"
+							element={<ShowProperties type={"all"} />}
+						/>
+						<Route
+							path="/show-properties/rent"
+							element={<ShowProperties type={"rent"} />}
+						/>
+						<Route
+							path="/show-properties/sale"
+							element={<ShowProperties type={"sale"} />}
+						/>
+						<Route path="/about-us" element={<About />} />
+						<Route path="/login" element={<SignIn />} />
+						<Route path="/register" element={<SignUp />} />
+						<Route path="/profile" element={<Profile />} />
+						<Route
+							path="/adminControl"
+							element={<AdminControl />}
+						/>
+						<Route
+							path="/list-property"
+							element={<ListProperty />}
+						/>
+						<Route path="/blogs" element={<Blogs />} />
+						<Route path="/compose-blog" element={<ComposeBlog />} />
+						<Route
+							path="/pricing-plans"
+							element={<PricingPlan />}
+						/>
+						<Route path="/help" element={<Help />} />
+						<Route
+							path="/admin-control"
+							element={<AdminControl />}
+						/>
+						<Route
+							path="/*"
+							element={<h1>Error - Page not found</h1>}
+						/>
+					</Routes>
+					<Footer />
+				</div>
+			</BrowserRouter>
+		</div>
+	);
 }
 
 export default App;

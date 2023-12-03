@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classes from "../assets/Styles/adminControl.module.css";
 import { useState, useRef } from "react";
 import JoditEditor from "jodit-react";
@@ -7,169 +7,213 @@ import AdminControlPropertyCard from "../components/AdminControlPropertyCard";
 import AdminControlBlogCard from "../components/AdminControlBlogCard";
 
 const AdminControl = () => {
-  const [AcType, setAcType] = useState(1);
+	const [AcType, setAcType] = useState(1);
+	const [blogs, setBlogs] = useState([]);
+	const [properties, setProperties] = useState([]);
+	const [users, setUsers] = useState([]);
 
-  const AdminControlTypeHandler = (type) => {
-    setAcType(type);
-  };
+	useEffect(() => {
+		const fetchData = async () => {
+			const properties = await fetch(
+				"http://localhost:3003/properties/all"
+			).then((res) => res.json());
+			const blogs = await fetch("http://localhost:3003/blogs/all").then(
+				(res) => res.json
+			);
 
-  //Jodit editor settings
-  const editor = useRef(null);
-  const [content, setContent] = useState("");
-  const config = {
-    readonly: false,
-    placeholder: "Compose your Mail...",
-    toolbarButtonSize: "small",
-    minHeight: 300,
-    buttons: [
-      "source",
-      "|",
-      "bold",
-      "italic",
-      "underline",
-      "strikethrough",
-      "|",
-      "superscript",
-      "subscript",
-      "|",
-      "ul",
-      "ol",
-      "|",
-      "outdent",
-      "indent",
-      "|",
-      "font",
-      "fontsize",
-      "brush",
-      "|",
-      "selectall",
-      "align",
-      "undo",
-      "redo",
-      "cut",
-      "hr",
-      "eraser",
-      "table",
-      "|",
-      "link",
-      "unlink",
-      "|",
-      "fullsize",
-      "|",
-      "print",
-      "about",
-    ],
-  };
+			const users = await fetch("http://localhost:3003/users/all").then(
+				(res) => res.json()
+			);
 
-  let AcContent = <></>;
+			setProperties(properties);
+			// setBlogs(blogs);
+			setUsers(users);
+		};
 
-  const AcContent1 = (
-    <>
-      <div className={classes.homeContent}>
-        <h2>User</h2>
-        <p>userEmail@gmail.com</p>
-      </div>
-      <div className={classes.adminForm}>
-        <form action="/allMail" method="post" className={classes.aform}>
-          <label htmlFor="subject"></label>
-          <input type="text" placeholder="Enter subject" name="subject" />
-          <div className={classes.content}>
-            <JoditEditor
-              className={classes.Jeditor}
-              ref={editor}
-              value={content}
-              config={config}
-              onBlur={(newContent) => setContent(newContent)}
-            />
-          </div>
-          <button id="BfButton1" type="submit" className={classes.abutton}>
-            Mail all users
-          </button>
-        </form>
-      </div>
-    </>
-  );
+		fetchData();
+	}, []);
 
-  const AcContent2 = (
-    <>
-      <div className={classes.usersContent}>
-        <AdminControlUserCard />
-      </div>
-    </>
-  );
+	const AdminControlTypeHandler = (type) => {
+		setAcType(type);
+	};
 
-  const AcContent3 = (
-    <>
-      <div className={classes.propertiesContent}>
-        <AdminControlPropertyCard />
-      </div>
-    </>
-  );
+	//Jodit editor settings
+	const editor = useRef(null);
+	const [content, setContent] = useState("");
+	const config = {
+		readonly: false,
+		placeholder: "Compose your Mail...",
+		toolbarButtonSize: "small",
+		minHeight: 300,
+		buttons: [
+			"source",
+			"|",
+			"bold",
+			"italic",
+			"underline",
+			"strikethrough",
+			"|",
+			"superscript",
+			"subscript",
+			"|",
+			"ul",
+			"ol",
+			"|",
+			"outdent",
+			"indent",
+			"|",
+			"font",
+			"fontsize",
+			"brush",
+			"|",
+			"selectall",
+			"align",
+			"undo",
+			"redo",
+			"cut",
+			"hr",
+			"eraser",
+			"table",
+			"|",
+			"link",
+			"unlink",
+			"|",
+			"fullsize",
+			"|",
+			"print",
+			"about",
+		],
+	};
 
-  const AcContent4 = (
-    <>
-      <div className={classes.blogsContent}>
-        <AdminControlBlogCard />
-      </div>
-    </>
-  );
+	let AcContent = <></>;
 
-  switch (AcType) {
-    case 1:
-      AcContent = AcContent1;
+	const AcContent1 = (
+		<>
+			<div className={classes.homeContent}>
+				<h2>User</h2>
+				<p>userEmail@gmail.com</p>
+			</div>
+			<div className={classes.adminForm}>
+				<form action="/allMail" method="post" className={classes.aform}>
+					<label htmlFor="subject"></label>
+					<input
+						type="text"
+						placeholder="Enter subject"
+						name="subject"
+					/>
+					<div className={classes.content}>
+						<JoditEditor
+							className={classes.Jeditor}
+							ref={editor}
+							value={content}
+							config={config}
+							onBlur={(newContent) => setContent(newContent)}
+						/>
+					</div>
+					<button
+						id="BfButton1"
+						type="submit"
+						className={classes.abutton}
+					>
+						Mail all users
+					</button>
+				</form>
+			</div>
+		</>
+	);
 
-      break;
-    case 2:
-      AcContent = AcContent2;
+	const AcContent2 = (
+		<>
+			<div className={classes.usersContent}>
+				{users &&
+					users.map((user) => (
+						<AdminControlUserCard user={user} key={user._id} />
+					))}
+			</div>
+		</>
+	);
 
-      break;
-    case 3:
-      AcContent = AcContent3;
+	const AcContent3 = (
+		<>
+			<div className={classes.propertiesContent}>
+				{properties &&
+					properties.map((property) => (
+						<AdminControlPropertyCard
+							property={property}
+							key={property._id}
+						/>
+					))}
+			</div>
+		</>
+	);
 
-      break;
-    case 4:
-      AcContent = AcContent4;
-      break;
+	const AcContent4 = (
+		<>
+			<div className={classes.blogsContent}>
+				{blogs &&
+					blogs.map((blog) => (
+						<AdminControlBlogCard blog={blog} key={blog._id} />
+					))}
+			</div>
+		</>
+	);
 
-    default:
-      break;
-  }
+	switch (AcType) {
+		case 1:
+			AcContent = AcContent1;
 
-  return (
-    <div className={classes.AdminControlall}>
-      <div className={classes.ACNavBar}>
-        <p
-          onClick={() => {
-            AdminControlTypeHandler(1);
-          }}
-        >
-          Home
-        </p>
-        <p
-          onClick={() => {
-            AdminControlTypeHandler(2);
-          }}
-        >
-          Users
-        </p>
-        <p
-          onClick={() => {
-            AdminControlTypeHandler(3);
-          }}
-        >
-          Properties
-        </p>
-        <p
-          onClick={() => {
-            AdminControlTypeHandler(4);
-          }}
-        >
-          Blogs
-        </p>
-      </div>
-      <div className={classes.AcContentContainer}>{AcContent}</div>
-    </div>
-  );
+			break;
+		case 2:
+			AcContent = AcContent2;
+
+			break;
+		case 3:
+			AcContent = AcContent3;
+
+			break;
+		case 4:
+			AcContent = AcContent4;
+			break;
+
+		default:
+			break;
+	}
+
+	return (
+		<div className={classes.AdminControlall}>
+			<div className={classes.ACNavBar}>
+				<p
+					onClick={() => {
+						AdminControlTypeHandler(1);
+					}}
+				>
+					Home
+				</p>
+				<p
+					onClick={() => {
+						AdminControlTypeHandler(2);
+					}}
+				>
+					Users
+				</p>
+				<p
+					onClick={() => {
+						AdminControlTypeHandler(3);
+					}}
+				>
+					Properties
+				</p>
+				<p
+					onClick={() => {
+						AdminControlTypeHandler(4);
+					}}
+				>
+					Blogs
+				</p>
+			</div>
+			<div className={classes.AcContentContainer}>{AcContent}</div>
+		</div>
+	);
 };
 
 export default AdminControl;
