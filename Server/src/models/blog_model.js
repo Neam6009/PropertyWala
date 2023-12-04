@@ -9,7 +9,7 @@ const blogSchema = mongoose.Schema({
 	blogAuthor: String,
 	blog_user_id: String,
 	date: String,
-	ImageUrl: String,
+	blogImage: String,
 });
 
 const Blog = new mongoose.model("blog", blogSchema);
