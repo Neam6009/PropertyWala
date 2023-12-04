@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import classes from "../assets/styles/PricingCard.module.css";
 const PricingCard = ({ title, price, storage, users, sendUp }) => {

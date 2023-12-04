@@ -30,6 +30,7 @@ import PrivacyPolicy from "./routes/PrivacyPolicy";
 import FAQ from "./routes/FAQ";
 import { setUser } from "./features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import PropertyDetails from "./routes/PropertyDetails";
 
 // function App() {
 //   const [properties, setProperties] = useState([]);
@@ -348,6 +349,20 @@ const router = createBrowserRouter([
         </div>
       </>
     ),
+  },
+  {
+    path: "/propertyDetails",
+    element: (
+      <>
+        <Navbar />
+        <Sidebar />
+        <div style={{ marginLeft: "4rem" }}>
+          <PropertyDetails />
+          <Footer />
+        </div>
+      </>
+    ),
+    loader: propertiesLoader,
   },
   {
     path: "/*",

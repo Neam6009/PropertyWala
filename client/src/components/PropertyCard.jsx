@@ -3,6 +3,7 @@ import classes from "../assets/Styles/propertyCard.module.css";
 import noImg from "../assets/images/PW_noImageFound.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBed, faBath, faChartArea } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   let d = "type";
@@ -20,7 +21,11 @@ const PropertyCard = ({ property }) => {
       <div className={classes.propertyCard_info}>
         <span className={classes.coloredText}>{"₹ " + property.price}</span>
         <span className={classes.greyText}>{d}</span>
-        <p className={classes.pcBigText}>{property.name}</p>
+        <p className={classes.pcBigText}>
+          <Link to="/propertyDetails" style={{ textDecoration: "none" }}>
+            {property.name}
+          </Link>
+        </p>
         <p className={classes.greyText}>{property.location}</p>
         <div className={classes.propertyCardNav}>
           <span className={classes.pcStats}>
