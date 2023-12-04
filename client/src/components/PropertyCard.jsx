@@ -1,32 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "../assets/Styles/propertyCard.module.css";
 import noImg from "../assets/images/PW_noImageFound.png";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faBed, faBath,faChartArea} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBed, faBath, faChartArea } from "@fortawesome/free-solid-svg-icons";
 
 const PropertyCard = ({ property }) => {
-    let d = 'type';
+  let d = "type";
+  let img = property.propertyImage[0];
 
-    if(property.type == 'rent'){
-         d=  '/month';
-    }else{
-        d=' for sale';
-    }
+  if (property.purpose == "sale") {
+    d = " for Sale";
+  } else {
+    d = " /month";
+  }
 
   return (
     <div className={classes.propertyCard}>
-      <img src={noImg} alt="image error" />
+      <img src={img} alt="image error" />
       <div className={classes.propertyCard_info}>
-        <span className={classes.coloredText}>{ '₹ ' +property.price}</span>
+        <span className={classes.coloredText}>{"₹ " + property.price}</span>
         <span className={classes.greyText}>{d}</span>
-        <p className={classes.pcBigText}>{property.propertyName}</p>
+        <p className={classes.pcBigText}>{property.name}</p>
         <p className={classes.greyText}>{property.location}</p>
         <div className={classes.propertyCardNav}>
-            <span><FontAwesomeIcon icon={faBed} /><span>{property.bedsNum}</span></span>
-            <span><FontAwesomeIcon icon={faBath} /><span>{property.bathsNum}</span></span>
-            <span><FontAwesomeIcon icon={faChartArea} /><span>{property.area}</span></span>
+          <span className={classes.pcStats}>
+            <FontAwesomeIcon icon={faBed} />
+            <span>{property.bedsNum}</span>
+          </span>
+          <span className={classes.pcStats}>
+            <FontAwesomeIcon icon={faBath} />
+            <span>{property.bathsNum}</span>
+          </span>
+          <span className={classes.pcStats}>
+            <FontAwesomeIcon icon={faChartArea} />
+            <span>{property.area}</span>
+          </span>
         </div>
-
       </div>
     </div>
   );

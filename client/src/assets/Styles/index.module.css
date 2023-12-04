@@ -147,6 +147,7 @@
 .segment3 img {
   width: 100%;
   border-radius: 5px;
+  margin: 1rem;
 }
 
 .s3Icons {
@@ -365,6 +366,12 @@
 
   .emailInputFields input {
     width: 85%;
+  }
+
+  .col {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
   }
 }
 

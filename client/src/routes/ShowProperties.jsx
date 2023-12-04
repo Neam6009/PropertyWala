@@ -3,8 +3,11 @@ import classes from "../assets/Styles/properties.module.css";
 import PropertyCard from "../components/PropertyCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useLoaderData } from "react-router-dom";
 
 const ShowProperties = ({ type }) => {
+  const properties = useLoaderData();
+
   return (
     <main className={classes.spMain}>
       <header>
@@ -83,138 +86,9 @@ const ShowProperties = ({ type }) => {
       </div>
 
       <section className={classes.propertiesContainer}>
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
-        <PropertyCard
-          property={{
-            price: "price",
-            type: "rent",
-            propertyName: "name",
-            location: "City",
-            area: "area",
-            bedsNum: "beds",
-            bathsNum: "baths",
-          }}
-        />
+        {properties.map((property) => (
+          <PropertyCard key={property._id} property={property} />
+        ))}
       </section>
     </main>
   );

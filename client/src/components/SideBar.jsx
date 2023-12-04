@@ -57,44 +57,34 @@ function Sidebar() {
           <HoverText text="Sell" top={3} />
         </Link>
 
-        <Link className={styles.sidebarLink} to="/my-properties">
-          <button className={styles.sidebarButton}>Mp</button>
-          <HoverText text="My Properties" top={4} />
-        </Link>
-
-        <Link className={styles.sidebarLink} to="#">
-          <button className={styles.sidebarButton}>Pa</button>
-          <HoverText text="Property Analysis" top={5} />
-        </Link>
-
         <Link className={styles.sidebarLink} to="/blogs">
           <button className={styles.sidebarButton}>BP</button>
-          <HoverText text="Blog Post" top={6} />
+          <HoverText text="Blog Post" top={4} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/help">
           <button className={styles.sidebarButton}>H</button>
-          <HoverText text="Help" top={7} />
+          <HoverText text="Help" top={5} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/about-us">
           <button className={styles.sidebarButton}>AU</button>
-          <HoverText text="About Us" top={8} />
+          <HoverText text="About Us" top={6} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/pricing-plans">
           <button className={styles.sidebarButton}>P</button>
-          <HoverText text="Premium" top={9} />
+          <HoverText text="Premium" top={7} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/compose-blog">
           <button className={styles.sidebarButton}>C</button>
-          <HoverText text="Compose" top={10} />
+          <HoverText text="Compose" top={8} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/admin-control">
           <button className={styles.sidebarButton}>AD</button>
-          <HoverText text="Admin Controls" top={11} />
+          <HoverText text="Admin Controls" top={9} />
         </Link>
       </div>
     </div>
@@ -120,14 +110,6 @@ function Sidebar() {
 
         <Link className={styles.sidebarLink} to="/list-property">
           <button className={styles.sidebarButton}>Sell</button>
-        </Link>
-
-        <Link className={styles.sidebarLink} to="/my-properties">
-          <button className={styles.sidebarButton}>My properties</button>
-        </Link>
-
-        <Link className={styles.sidebarLink} to="#">
-          <button className={styles.sidebarButton}>Property analysis</button>
         </Link>
 
         <Link className={styles.sidebarLink} to="/blogs">
