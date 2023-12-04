@@ -28,6 +28,8 @@ import TermsOfService from "./routes/TermsOfService";
 import TrustAndSafety from "./routes/TrustAndSafety";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
 import FAQ from "./routes/FAQ";
+import { setUser } from "./features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 // function App() {
 //   const [properties, setProperties] = useState([]);
