@@ -8,176 +8,175 @@ const userModel = require("../models/user_model");
 mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
 exports.login = async (req, res) => {
-	try {
-		const { email, password } = req.body;
-		if (!email || !password) {
-			return res.json({
-				error: "Please Enter Your Email and Password",
-			});
-		}
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.json({
+        error: "Please Enter Your Email and Password",
+      });
+    }
 
-		// check if the user exists
-		const user = await userModel.User.findOne({ email: email });
-		if (!user) {
-			return res.json({
-				error: "Email not registered, register first",
-			});
-		} else {
-			if (!(await bcrypt.compare(password, user.password))) {
-				return res.json({
-					error: "Incorrect password!",
-				});
-			} else {
-				const id = user._id;
-				const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
-					expiresIn: process.env.JWT_EXPIRES_IN,
-				});
-				console.log("The Token is " + token);
-				const cookieOptions = {
-					expires: new Date(
-						Date.now() +
-							process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-					),
-					httpOnly: true,
-				};
-				res.cookie("joes", token, cookieOptions);
-				return res.status(200).json({
-					user,
-				});
-			}
-		}
-	} catch (error) {
-		res.status(400).json({ error });
-	}
+    // check if the user exists
+    const user = await userModel.User.findOne({ email: email });
+    if (!user) {
+      return res.json({
+        error: "Email not registered, register first",
+      });
+    } else {
+      if (!(await bcrypt.compare(password, user.password))) {
+        return res.json({
+          error: "Incorrect password!",
+        });
+      } else {
+        const id = user._id;
+        const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        });
+        console.log("The Token is " + token);
+        const cookieOptions = {
+          expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+          ),
+          httpOnly: true,
+        };
+        res.cookie("joes", token, cookieOptions);
+        return res.status(200).json({
+          user,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 exports.register = async (req, res) => {
-	var lowerCaseLetters = /[a-z]/g;
-	var upperCaseLetters = /[A-Z]/g;
-	var numbers = /[0-9]/g;
+  var lowerCaseLetters = /[a-z]/g;
+  var upperCaseLetters = /[A-Z]/g;
+  var numbers = /[0-9]/g;
 
-	const { name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-	if (
-		!password.match(lowerCaseLetters) ||
-		!password.match(upperCaseLetters) ||
-		!password.match(numbers) ||
-		password.length < 8
-	) {
-		return res.json({
-			error: "Password should contain lower case, upper case, number and minimum of length 8",
-		});
-	}
-	try {
-		// check if the user exists
-		const user = await userModel.User.findOne({ email: email });
-		if (user) {
-			return res.json({
-				error: "Email id already Taken",
-			});
-		}
-	} catch (error) {
-		res.status(400).json({ error });
-	}
+  if (
+    !password.match(lowerCaseLetters) ||
+    !password.match(upperCaseLetters) ||
+    !password.match(numbers) ||
+    password.length < 8
+  ) {
+    return res.json({
+      error:
+        "Password should contain lower case, upper case, number and minimum of length 8",
+    });
+  }
+  try {
+    // check if the user exists
+    const user = await userModel.User.findOne({ email: email });
+    if (user) {
+      return res.json({
+        error: "Email id already Taken",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 
-	let hashedPassword = await bcrypt.hash(password, 8);
+  let hashedPassword = await bcrypt.hash(password, 8);
 
-	const user = await new userModel.User({
-		name,
-		email,
-		password: hashedPassword,
-		isAdmin: false,
-		isCertified: false,
-		wishlist: [],
-	}).save();
+  const user = await new userModel.User({
+    name,
+    email,
+    password: hashedPassword,
+    isAdmin: false,
+    isCertified: false,
+    wishlist: [],
+  }).save();
 
-	return res.status(200).json({
-		msg: "You have registered now log in",
-	});
+  return res.status(200).json({
+    msg: "You have registered now log in",
+  });
 };
 
 exports.isLoggedIn = async (req, res, next) => {
-	if (req.cookies.joes) {
-		try {
-			const decode = await promisify(jwt.verify)(
-				req.cookies.joes,
-				process.env.JWT_SECRET
-			);
-			const user = await userModel.User.findOne({ _id: decode.id });
-			if (!user) {
-				return res.json({
-					error: "No user logged in",
-				});
-			}
-			return res.status(200).json({
-				user,
-			});
-		} catch (error) {
-			console.log(error);
-			res.status(400).json({ error });
-		}
-	} else {
-		return;
-	}
+  if (req.cookies.joes) {
+    try {
+      const decode = await promisify(jwt.verify)(
+        req.cookies.joes,
+        process.env.JWT_SECRET
+      );
+      const user = await userModel.User.findOne({ _id: decode.id });
+      if (!user) {
+        return res.json({
+          error: "No user logged in",
+        });
+      }
+      return res.status(200).json({
+        user,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error });
+    }
+  } else {
+    return;
+  }
 };
-
 exports.logout = async (req, res) => {
-	res.cookie("joes", "logout", {
-		expires: new Date(Date.now() + 2 * 1000),
-		httpOnly: true,
-	});
-	res.status(200).redirect("/");
+  res.cookie("joes", "", {
+    expires: new Date(0),
+    httpOnly: true,
+  });
+  res.status(200).send("Logout successful");
 };
 
 exports.wishlist = async (req, res) => {
-	const userId = req.user.id;
-	const propertyId = req.params.propertyId;
-	const wishlist = req.user.wishlist;
-	if (wishlist.includes(propertyId)) {
-		userModel.User.findById(userId).then((user) => {
-			const index = user.wishlist.indexOf(propertyId);
-			user.wishlist.splice(index, 1);
-			user.save();
-		});
-	} else {
-		userModel.User.findById(userId).then((user) => {
-			user.wishlist.push(propertyId);
-			user.save();
-		});
-	}
-	res.end();
+  const userId = req.user.id;
+  const propertyId = req.params.propertyId;
+  const wishlist = req.user.wishlist;
+  if (wishlist.includes(propertyId)) {
+    userModel.User.findById(userId).then((user) => {
+      const index = user.wishlist.indexOf(propertyId);
+      user.wishlist.splice(index, 1);
+      user.save();
+    });
+  } else {
+    userModel.User.findById(userId).then((user) => {
+      user.wishlist.push(propertyId);
+      user.save();
+    });
+  }
+  res.end();
 };
 
 exports.certified = async (req, res) => {
-	const change = req.params.change;
-	const userId = req.params.userId;
+  const change = req.params.change;
+  const userId = req.params.userId;
 
-	userModel.User.findById(userId).then((user) => {
-		user.isCertified = change === "true";
-		user.save();
+  userModel.User.findById(userId).then((user) => {
+    user.isCertified = change === "true";
+    user.save();
 
-		console.log(user);
-	});
+    console.log(user);
+  });
 
-	res.end();
+  res.end();
 };
 exports.admin = async (req, res) => {
-	const change = req.params.change;
-	const userId = req.params.userId;
-	console.log(change);
+  const change = req.params.change;
+  const userId = req.params.userId;
+  console.log(change);
 
-	userModel.User.findById(userId).then((user) => {
-		user.isAdmin = change === "true";
-		user.save();
+  userModel.User.findById(userId).then((user) => {
+    user.isAdmin = change === "true";
+    user.save();
 
-		console.log(user);
-	});
+    console.log(user);
+  });
 
-	res.end();
+  res.end();
 };
 
 exports.getAllUsers = async (req, res) => {
-	const users = await userModel.User.find(); //const users = await userModel.User.find({ _id: { $ne: req.user._id } });
+  const users = await userModel.User.find(); //const users = await userModel.User.find({ _id: { $ne: req.user._id } });
 
-	return res.status(200).json(users);
+  return res.status(200).json(users);
 };

@@ -22,7 +22,10 @@ const PropertyCard = ({ property }) => {
         <span className={classes.coloredText}>{"₹ " + property.price}</span>
         <span className={classes.greyText}>{d}</span>
         <p className={classes.pcBigText}>
-          <Link to="/propertyDetails" style={{ textDecoration: "none" }}>
+          <Link
+            to={`/propertyDetails/${property._id}`}
+            style={{ textDecoration: "none" }}
+          >
             {property.name}
           </Link>
         </p>

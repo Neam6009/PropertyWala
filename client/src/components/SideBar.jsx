@@ -5,6 +5,11 @@ import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faLandmark } from "@fortawesome/free-solid-svg-icons";
 import { set } from "react-hook-form";
+// import rent from "../assets/Styles/rent";
+// import aboutUsImg from "../assets/Styles/aboutUs.svg";
+// import adminImg from "../assets/Styles/admin.svg";
+// import blogImg from "../assets/Styles/blog.svg";
+// import buyImg from "../assets/Styles/buy.svg";
 
 function Sidebar() {
   const [sideBar, setSideBar] = useState(false);

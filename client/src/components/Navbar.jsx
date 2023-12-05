@@ -1,11 +1,31 @@
 import React from "react";
 import classes from "../assets/Styles/navbar.module.css";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/images/PW_logo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
 
 const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logOutHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:3003/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      dispatch(setUser(null));
+    } catch (error) {
+      // Handle network errors
+      console.error("Network error:", error);
+    }
+  };
 
   return (
     <div className={classes.NavAll}>
@@ -19,8 +39,10 @@ const Navbar = () => {
             <p>{user.name[0]}</p>
           </Link>
           <p className={classes.navUserName}>{user.name}</p>
-          <Link to="/auth/logout">
-            <button className={classes.navSignup}>Logout</button>
+          <Link>
+            <button className={classes.navSignup} onClick={logOutHandler}>
+              Logout
+            </button>
           </Link>
         </div>
       )}

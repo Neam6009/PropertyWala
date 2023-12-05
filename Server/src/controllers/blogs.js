@@ -30,6 +30,8 @@ exports.insertBlog = async (req, res) => {
 	const image = req.body.image;
 	const user = req.body.user;
 
+	// console.log(blog, user, image);
+
 	let today = new Date();
 	let day = today.toLocaleDateString("en-IN", { dateStyle: "long" });
 	await blogModel.Blog.create({

@@ -31,26 +31,27 @@ import FAQ from "./routes/FAQ";
 import { setUser } from "./features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import PropertyDetails from "./routes/PropertyDetails";
+import BlogDetails from "./routes/BlogDetails";
 
 // function App() {
 //   const [properties, setProperties] = useState([]);
 //   const [blogs, setBlogs] = useState([]);
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const properties = await fetch(
-//         "http://localhost:3003/properties/all"
-//       ).then((res) => res.json());
+// useEffect(() => {
+// 	const fetchData = async () => {
+// 		const properties = await fetch(
+// 			"http://localhost:3003/properties/all"
+// 		).then((res) => res.json());
 
-//       const blogs = await fetch("http://localhost:3003/blogs/all").then(
-//         (res) => res.json
-//       );
+// 		const blogs = await fetch("http://localhost:3003/blogs/all").then(
+// 			(res) => res.json
+// 		);
 
-//       setProperties(properties);
-//       setBlogs(blogs);
-//     };
-//     fetchData();
-//   }, []);
+// 		setProperties(properties);
+// 		setBlogs(blogs);
+// 	};
+// 	fetchData();
+// }, []);
 
 //   return (
 //     <div
@@ -111,6 +112,13 @@ const propertiesLoader = async () => {
   return properties;
 };
 
+const blogsLoader = async () => {
+  const blogs = await fetch("http://localhost:3003/blogs/all").then((res) =>
+    res.json()
+  );
+  return blogs;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -141,33 +149,20 @@ const router = createBrowserRouter([
     loader: propertiesLoader,
   },
   {
-    path: "/show-properties/rent",
+    path: "/show-properties/:purpose",
     element: (
       <>
         <Navbar />
         <Sidebar />
         <div style={{ marginLeft: "4rem" }}>
-          <ShowProperties type={"rent"} />
+          <ShowProperties />
           <Footer />
         </div>
       </>
     ),
     loader: propertiesLoader,
   },
-  {
-    path: "/show-properties/sale",
-    element: (
-      <>
-        <Navbar />
-        <Sidebar />
-        <div style={{ marginLeft: "4rem" }}>
-          <ShowProperties type={"sale"} />
-          <Footer />
-        </div>
-      </>
-    ),
-    loader: propertiesLoader,
-  },
+
   {
     path: "/about-us",
     element: (
@@ -245,6 +240,7 @@ const router = createBrowserRouter([
         </div>
       </>
     ),
+    loader: blogsLoader,
   },
   {
     path: "/compose-blog",
@@ -351,7 +347,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/propertyDetails",
+    path: "/propertyDetails/:id",
     element: (
       <>
         <Navbar />
@@ -363,6 +359,20 @@ const router = createBrowserRouter([
       </>
     ),
     loader: propertiesLoader,
+  },
+  {
+    path: "/blogDetails/:id",
+    element: (
+      <>
+        <Navbar />
+        <Sidebar />
+        <div style={{ marginLeft: "4rem" }}>
+          <BlogDetails />
+          <Footer />
+        </div>
+      </>
+    ),
+    loader: blogsLoader,
   },
   {
     path: "/*",
@@ -382,6 +392,33 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("http://localhost:3003/auth/verify", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        const data = await response.json();
+        if (data.user) {
+          //set user
+          dispatch(setUser(data.user));
+          console.log("Login successful:", data.user);
+        } else {
+          console.error("Login failed");
+        }
+      } catch (error) {
+        // Handle network errors
+        console.error("Network error:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   return <RouterProvider router={router} />;
 };
 
