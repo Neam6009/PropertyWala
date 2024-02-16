@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   let d = "type";
-  let img = property.propertyImage[0];
+  let img = property?.propertyImage[0];
 
   if (property.purpose == "sale") {
     d = " for Sale";

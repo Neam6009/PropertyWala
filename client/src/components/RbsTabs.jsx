@@ -17,21 +17,48 @@ const RbsTabs = () => {
         <TabList style={{ border: "none", margin: 0 }}>
           <Tab
             style={
-              rbsType === 0 ? { margin: 0, border: 0, color: "#7164F0" } : {}
+              rbsType === 0
+                ? {
+                    margin: 0,
+                    border: 0,
+                    color: "#7164F0",
+                    textDecoration: "none",
+                  }
+                : {
+                    textDecoration: "none",
+                  }
             }
           >
             Rent
           </Tab>
           <Tab
             style={
-              rbsType === 1 ? { margin: 0, border: 0, color: "#7164F0" } : {}
+              rbsType === 1
+                ? {
+                    margin: 0,
+                    border: 0,
+                    color: "#7164F0",
+                    textDecoration: "none",
+                  }
+                : {
+                    textDecoration: "none",
+                  }
             }
           >
             Buy
           </Tab>
           <Tab
             style={
-              rbsType === 2 ? { margin: 0, border: 0, color: "#7164F0" } : {}
+              rbsType === 2
+                ? {
+                    margin: 0,
+                    border: 0,
+                    color: "#7164F0",
+                    textDecoration: "none",
+                  }
+                : {
+                    textDecoration: "none",
+                  }
             }
           >
             Sell

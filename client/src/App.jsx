@@ -29,7 +29,7 @@ import TrustAndSafety from "./routes/TrustAndSafety";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
 import FAQ from "./routes/FAQ";
 import { setUser } from "./features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PropertyDetails from "./routes/PropertyDetails";
 import BlogDetails from "./routes/BlogDetails";
 
@@ -118,6 +118,8 @@ const blogsLoader = async () => {
   );
   return blogs;
 };
+
+const getUserById = async () => {};
 
 const router = createBrowserRouter([
   {

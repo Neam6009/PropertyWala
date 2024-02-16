@@ -3,159 +3,144 @@ import { useSelector } from "react-redux";
 import classes from "../assets/Styles/profile.module.css";
 import { useState } from "react";
 import PropertyCard from "../components/PropertyCard";
+import { useEffect } from "react";
 
 const Profile = () => {
-	const user = useSelector((state) => state.auth.user);
-	console.log(user);
-	const [profileContentType, setProfileContentType] = useState(1);
-	const [properties, setProperties] = useState([]);
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
+  const [profileContentType, setProfileContentType] = useState(1);
+  const [properties, setProperties] = useState(null);
+  console.log(user);
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const properties = await fetch(
-				`http://localhost:3003/properties/user/${user._id}`
-			).then((res) => res.json());
+  useEffect(() => {
+    const fetchData = async () => {
+      const properties = await fetch(
+        `http://localhost:3003/properties/user/${user._id}`
+      ).then((res) => res.json());
 
-			setProperties(properties);
-		};
-		fetchData();
-	}, []);
+      setProperties(properties);
+      console.log(properties);
+    };
+    fetchData();
+  }, [user]);
 
-	let profileContent = <></>;
+  let profileContent = <></>;
 
-	const profileContent1 = (
-		<div>
-			<PropertyCard
-				property={{
-					price: "price",
-					type: "rent",
-					propertyName: "name",
-					location: "City",
-					area: "area",
-					bedsNum: "beds",
-					bathsNum: "baths",
-				}}
-			/>
-		</div>
-	);
+  const profileContent1 = (
+    <div>
+      {properties &&
+        (user.wishlist.length == 0 ? (
+          "Please list a property!"
+        ) : (
+          <PropertyCard property={properties[0]} />
+        ))}
+    </div>
+  );
 
-	const profileContent2 = (
-		<div>
-			<PropertyCard
-				property={{
-					price: "price",
-					type: "rent",
-					propertyName: "name",
-					location: "City",
-					area: "area",
-					bedsNum: "beds",
-					bathsNum: "baths",
-				}}
-			/>
-		</div>
-	);
+  const profileContent2 = (
+    <div>
+      {properties &&
+        (user.wishlist.length == 0 ? (
+          "wishlist empty"
+        ) : (
+          <PropertyCard property={user.wishlist[0]} />
+        ))}
+    </div>
+  );
 
-	const profileContent3 = (
-		<div className={classes.pfContactContainer}>
-			<div className={classes.pfContact1}>
-				<p>Username </p>
-				<p className={classes.pfLabel1}>Neam</p>
-			</div>
-			<div className={classes.pfContact2}>
-				<p>Email </p>
-				<p className={classes.pfLabel2}>userEmail@gmail.com</p>
-			</div>
-			<div className={classes.pfContact3}>
-				<p>Mobile number </p>
-				<p className={classes.pfLabel3}>9234567892</p>
-			</div>
-		</div>
-	);
+  const profileContent3 = (
+    <div className={classes.pfContactContainer}>
+      <div className={classes.pfContact1}>
+        <p>Username </p>
+        <p className={classes.pfLabel1}>{user?.name}</p>
+      </div>
+      <div className={classes.pfContact2}>
+        <p>Email </p>
+        <p className={classes.pfLabel2}>{user?.email}</p>
+      </div>
+      <div className={classes.pfContact3}>
+        <p>Mobile number </p>
+        <p className={classes.pfLabel3}>9234567892</p>
+      </div>
+    </div>
+  );
 
-	switch (profileContentType) {
-		case 1:
-			profileContent = profileContent1;
+  switch (profileContentType) {
+    case 1:
+      profileContent = profileContent1;
 
-			break;
-		case 2:
-			profileContent = profileContent2;
+      break;
+    case 2:
+      profileContent = profileContent2;
 
-			break;
-		case 3:
-			profileContent = profileContent3;
+      break;
+    case 3:
+      profileContent = profileContent3;
 
-			break;
+      break;
 
-		default:
-			break;
-	}
+    default:
+      break;
+  }
 
-	const profileContentHandler = (type) => {
-		setProfileContentType(type);
-	};
+  const profileContentHandler = (type) => {
+    setProfileContentType(type);
+  };
 
-	return (
-		<div className={classes.profileAll}>
-			<div className={classes.userDetails}>
-				<h2>Your Profile</h2>
-				<p className={classes.userIcon}>N</p>
-				<p>User Name</p>
-				<div className={classes.userDetailsStats}>
-					<div className={classes.userStats}>
-						<p className={classes.userStatsNumber}>5</p>
-						<p className={classes.userStatsLabel}>
-							properties checked
-						</p>
-					</div>
-					<div className={classes.userStats}>
-						<p className={classes.userStatsNumber}>7</p>
-						<p className={classes.userStatsLabel}>
-							properties posted
-						</p>
-					</div>
-					<div className={classes.userStats}>
-						<p className={classes.userStatsNumber}>15</p>
-						<p className={classes.userStatsLabel}>
-							properties in wishlist
-						</p>
-					</div>
-				</div>
-				<button className={classes.cpButton}>Change Password</button>
-				<button className={classes.daButton}> Delete Account</button>
-			</div>
-			<div className={classes.userPropertyDetails}>
-				<div className={classes.upNav}>
-					<div
-						className={classes.upNavButton}
-						onClick={() => {
-							profileContentHandler(1);
-						}}
-					>
-						Your Properties
-					</div>
-					<div
-						className={classes.upNavButton}
-						onClick={() => {
-							profileContentHandler(2);
-						}}
-					>
-						WhishList
-					</div>
-					<div
-						className={classes.upNavButton}
-						onClick={() => {
-							profileContentHandler(3);
-						}}
-					>
-						Contact
-					</div>
-				</div>
-				<div className={classes.userPropertyContent}>
-					{profileContent}
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className={classes.profileAll}>
+      <div className={classes.userDetails}>
+        <h2>Your Profile</h2>
+        <p className={classes.userIcon}>N</p>
+        <p>User Name</p>
+        <div className={classes.userDetailsStats}>
+          <div className={classes.userStats}>
+            <p className={classes.userStatsNumber}>5</p>
+            <p className={classes.userStatsLabel}>properties checked</p>
+          </div>
+          <div className={classes.userStats}>
+            <p className={classes.userStatsNumber}>7</p>
+            <p className={classes.userStatsLabel}>properties posted</p>
+          </div>
+          <div className={classes.userStats}>
+            <p className={classes.userStatsNumber}>15</p>
+            <p className={classes.userStatsLabel}>properties in wishlist</p>
+          </div>
+        </div>
+        <button className={classes.cpButton}>Change Password</button>
+        <button className={classes.daButton}> Delete Account</button>
+      </div>
+      <div className={classes.userPropertyDetails}>
+        <div className={classes.upNav}>
+          <div
+            className={classes.upNavButton}
+            onClick={() => {
+              profileContentHandler(1);
+            }}
+          >
+            Your Properties
+          </div>
+          <div
+            className={classes.upNavButton}
+            onClick={() => {
+              profileContentHandler(2);
+            }}
+          >
+            WhishList
+          </div>
+          <div
+            className={classes.upNavButton}
+            onClick={() => {
+              profileContentHandler(3);
+            }}
+          >
+            Contact
+          </div>
+        </div>
+        <div className={classes.userPropertyContent}>{profileContent}</div>
+      </div>
+    </div>
+  );
 };
 
 export default Profile;
