@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/PropertyDetails.module.css";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLoaderData, useLocation, useParams } from "react-router-dom";
 import SimpleSliderPd from "../components/PropertyDetailsCarousel";
 
 const PropertyDetails = () => {
   const { id } = useParams();
-  console.log(id);
 
+  const user = useSelector((state) => state.auth.user);
+  console.log(user);
   const properties = useLoaderData();
   const property = properties.find((e) => e._id == id);
-  console.log(property);
+  // console.log(property);
 
   const [info, setInfo] = useState(false);
 
@@ -29,7 +31,7 @@ const PropertyDetails = () => {
               <span>{property.location}, </span>
               <span>{property.locality}</span>
             </div>
-            <button>Favourite</button>
+            {user && <button>favourite</button>}
           </div>
           <div className={classes.pdCarousel}>
             <SimpleSliderPd propertyImage={property.propertyImage} />

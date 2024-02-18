@@ -2,6 +2,46 @@
   background-color: F7F7FD;
 }
 
+.searchBar {
+  margin-left: 7rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.searchBar > input {
+  width: 40rem;
+  padding: 1rem;
+  border: 1px #9f98db;
+  border-style: groove;
+  border-radius: 5px;
+}
+
+.searchBar > button {
+  padding: 0.5rem;
+  border: 1px #9f98db;
+  border-style: groove;
+  border-radius: 5px;
+  font-size: large;
+  background-color: #7164f0;
+}
+
+.propertyFilters {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 800px) {
+  .propertyFilters {
+    margin-left: 3rem;
+  }
+}
+
 .colouredText {
   color: #7164f0;
   font-weight: bold;
@@ -17,11 +57,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap:1rem;
-  color: #4F4F4F;
+  gap: 1rem;
+  color: #4f4f4f;
 }
 
-.propertiesContainer{
+.headerClass > p {
+  margin-left: 3.5rem;
+}
+
+.propertiesContainer {
   padding: 5rem;
   display: flex;
   flex-wrap: wrap;
@@ -29,42 +73,40 @@
   justify-content: center;
 }
 
-.searchBar {
+/* .searchBar {
   border: 1px #e0def7;
   border-style: groove;
   border-radius: 5px;
   padding: 0.1rem;
-}
+} */
 
-.searchBarExtended {
+/* .searchBarExtended {
   display: none;
   border: 1px #e0def7;
   border-style: groove;
   border-radius: 5px;
   padding: 0.5rem;
-}
+} */
 
-.searchBar button {
+/* .searchBar button {
   background-color: #7164f0;
   color: white;
   padding: 0.2rem 0.4rem;
   border-radius: 5px;
   font-size: large;
-}
-
+} */
 
 .filters {
   display: flex;
   justify-content: space-evenly;
   padding: 1rem;
-
 }
 
 .filters button {
   display: none;
 }
 
-.filters>select {
+.filters > select {
   border: 1px solid;
   border-color: #7164f0;
   border-radius: 5px;
@@ -75,8 +117,7 @@
   display: none;
 }
 
-@media screen and (min-width:800px) {
-
+@media screen and (min-width: 800px) {
   .headerClass {
     padding: 2rem;
     display: flex;
@@ -84,11 +125,11 @@
     align-items: start;
   }
 
-  .searchBar {
+  /* .searchBar {
     display: none;
-  }
+  } */
 
-  .searchBarExtended {
+  /* .searchBarExtended {
     display: flex;
     min-width: 45em;
     justify-content: space-between;
@@ -106,7 +147,7 @@
     padding: 0.5rem;
     border: 0;
     border-radius: 5px;
-  }
+  } */
 
   .filters {
     display: flex;
@@ -130,11 +171,9 @@
     gap: 2rem;
     padding: 2rem;
   }
-
 }
 
-@media (max-width:650px) {
-
+@media (max-width: 650px) {
   .filters {
     display: none;
   }
@@ -146,24 +185,24 @@
     padding: 2rem;
   }
 
-  .filtersMinimized > div{
+  .filtersMinimized > div {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .filtersMinimized>div {
+  .filtersMinimized > div {
     display: flex;
     gap: 1rem;
   }
 
-  .filtersMinimized>div select {
+  .filtersMinimized > div select {
     border: 1px solid;
     border-color: #7164f0;
     border-radius: 5px;
     padding: 0.2rem;
   }
 
-  .filtersMinimized button{
+  .filtersMinimized button {
     display: block;
     background-color: #7164f0;
     padding: 0.5rem;
@@ -172,13 +211,10 @@
     color: white;
   }
 
-  .propertyListings{
+  .propertyListings {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2rem;
   }
-
 }
-
-

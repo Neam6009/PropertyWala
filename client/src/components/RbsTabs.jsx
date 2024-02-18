@@ -6,6 +6,7 @@ import { useState } from "react";
 
 const RbsTabs = () => {
   const [rbsType, setRbsType] = useState(0);
+  const [homeQuery, setHomeQuery] = useState("");
 
   return (
     <>
@@ -72,8 +73,14 @@ const RbsTabs = () => {
             borderRadius: "0.5rem",
           }}
         >
-          <input className={classes.tabsInput} />
-          <Link to="/show-properties/rent">
+          <input
+            className={classes.tabsInput}
+            value={homeQuery}
+            onChange={(e) => {
+              setHomeQuery(e.target.value);
+            }}
+          />
+          <Link to={`/show-properties/rent/${homeQuery}`}>
             <button className={classes.tabsButton}>Rent Now!</button>
           </Link>
         </TabPanel>
@@ -85,8 +92,14 @@ const RbsTabs = () => {
             borderRadius: "0.5rem",
           }}
         >
-          <input className={classes.tabsInput} />
-          <Link to="/show-properties/sale">
+          <input
+            className={classes.tabsInput}
+            value={homeQuery}
+            onChange={(e) => {
+              setHomeQuery(e.target.value);
+            }}
+          />
+          <Link to={`/show-properties/sale/${homeQuery}`}>
             <button className={classes.tabsButton}>Buy Now!</button>
           </Link>
         </TabPanel>
