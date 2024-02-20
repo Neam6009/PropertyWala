@@ -5,20 +5,49 @@ import authorImg from "../assets/images/PW_aboutUs_person2.png";
 import blog1img from "../assets/images/PW_blogs_image6.jpg";
 import blog2img from "../assets/images/PW_blogs_image11.jpg";
 import { useLoaderData, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
+import {useNavigate} from "react-router-dom";
 
 const BlogDetailsPage = () => {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
+
+
   const blogs = useLoaderData();
   const blog = blogs.find((e) => e._id == id);
 
+ 
+  const deleteBlogHandler =async ()=>{
+    const confirm = prompt("please enter \""+ blog.title +"\" to delete this blog");
+
+    if(confirm){
+      if(confirm == blog.title){
+        fetch(`http://localhost:3003/blogs/deleteBlog/${blog._id}`, {
+        method: "POST",
+      }).then(() => alert("This blog has been deleted!"));
+
+      navigate("/blogs");
+
+      }else{
+        alert("wrong blog title!")
+      }
+    }
+
+
+
+  }
+
   return (
-    <>
+    <div className={classes.blogDetailsALL}>
       <header className={classes.header}>
         <h1>{blog.title}</h1>
+        {user && blog.blog_user_id == user._id? <button className={classes.deleteBlogButton} onClick={deleteBlogHandler}>delete blog</button>: ""}
         <div>
           <p>
-            By <span>{blog.author}</span> .{" "}
+            By <span>{blog.blogAuthor}</span> .{" "}
             <span className={classes.greyText}>Last Updated </span>
             {blog.date}
           </p>
@@ -101,7 +130,7 @@ const BlogDetailsPage = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

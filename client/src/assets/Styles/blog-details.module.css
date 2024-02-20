@@ -94,6 +94,10 @@ header li :hover {
   text-decoration: underline;
 }
 
+.blogDetailsALL{
+  padding: 3rem;
+}
+
 .contentContainer {
   display: flex;
   flex-direction: column;
@@ -139,6 +143,23 @@ header li :hover {
 
 .sm {
   padding: 2rem;
+}
+
+
+.deleteBlogButton{
+  padding: 1rem;
+  background-color: white;
+  border: 0;
+  cursor: pointer;
+  position:absolute;
+  right: 5rem;
+  border: #7164f0 solid;
+  border-radius: 1rem;
+}
+
+.deleteBlogButton:hover{
+  background-color: #7164f0;
+  color: white;
 }
 
 @media screen and (min-width: 1000px) {

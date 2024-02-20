@@ -5,6 +5,8 @@ import { Outlet, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faLandmark } from "@fortawesome/free-solid-svg-icons";
 import { set } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
 // import rent from "../assets/Styles/rent";
 // import aboutUsImg from "../assets/Styles/aboutUs.svg";
 // import adminImg from "../assets/Styles/admin.svg";
@@ -13,7 +15,7 @@ import { set } from "react-hook-form";
 
 function Sidebar() {
   const [sideBar, setSideBar] = useState(false);
-
+  const user = useSelector((state) => state.auth.user);
   const SideBarHandler = () => {
     sideBar ? setSideBar(false) : setSideBar(true);
   };
@@ -49,48 +51,56 @@ function Sidebar() {
 
         <Link className={styles.sidebarLink} to="/show-properties/rent">
           <button className={styles.sidebarButton}>R</button>
-          <HoverText text="Rent" top={1} />
+          <HoverText text="Rent" top={0.9} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/show-properties/sale">
           <button className={styles.sidebarButton}>B</button>
-          <HoverText text="Buy" top={2} />
+          <HoverText text="Buy" top={1.9} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/list-property">
           <button className={styles.sidebarButton}>S</button>
-          <HoverText text="Sell" top={3} />
+          <HoverText text="Sell" top={2.9} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/blogs">
           <button className={styles.sidebarButton}>BP</button>
-          <HoverText text="Blog Post" top={4} />
+          <HoverText text="Blog Post" top={3.75} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/help">
           <button className={styles.sidebarButton}>H</button>
-          <HoverText text="Help" top={5} />
+          <HoverText text="Help" top={4.75} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/about-us">
           <button className={styles.sidebarButton}>AU</button>
-          <HoverText text="About Us" top={6} />
+          <HoverText text="About Us" top={5.75} />
         </Link>
 
         <Link className={styles.sidebarLink} to="/pricing-plans">
           <button className={styles.sidebarButton}>P</button>
-          <HoverText text="Premium" top={7} />
+          <HoverText text="Premium" top={6.75} />
         </Link>
 
-        <Link className={styles.sidebarLink} to="/compose-blog">
+        {user && (user?.isCertified? 
+        <>
+          <Link className={styles.sidebarLink} to="/compose-blog">
           <button className={styles.sidebarButton}>C</button>
-          <HoverText text="Compose" top={8} />
+          <HoverText text="Compose" top={7.75} />
+        </Link></>: "")}
+
+        {user && (user?.isAdmin? 
+        <>
+          <Link className={styles.sidebarLink} to="/admin-control">
+          <button className={styles.sidebarButton}>AD</button>
+          <HoverText text="Admin Controls" top={8.75} />
         </Link>
 
-        <Link className={styles.sidebarLink} to="/admin-control">
-          <button className={styles.sidebarButton}>AD</button>
-          <HoverText text="Admin Controls" top={9} />
-        </Link>
+        </>: "")}
+
+        
       </div>
     </div>
   );
@@ -133,13 +143,22 @@ function Sidebar() {
           <button className={styles.sidebarButton}>Premium</button>
         </Link>
 
-        <Link className={styles.sidebarLink} to="/compose-blog">
+        {user && (user?.isCertified? 
+        <>
+          <Link className={styles.sidebarLink} to="/compose-blog">
           <button className={styles.sidebarButton}>Compose</button>
         </Link>
+        </>: "")}
 
-        <Link className={styles.sidebarLink} to="/admin-control">
+        {user && (user?.isAdmin? 
+        <>
+          <Link className={styles.sidebarLink} to="/admin-control">
           <button className={styles.sidebarButton}>Admin Controls</button>
         </Link>
+        </>: "")}
+        
+
+        
       </div>
     </>
   );

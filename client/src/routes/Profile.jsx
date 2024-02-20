@@ -196,6 +196,8 @@ const Profile = () => {
   const deleteAccountHandler = async()=>{
     const confirm = prompt("please enter your password to delete your account!")
 
+    if(confirm){
+
       try {
         const response = await fetch(
           "http://localhost:3003/auth/deleteUser",
@@ -220,6 +222,9 @@ const Profile = () => {
       } catch (error) {
         console.error("Network error:", error);
       }
+
+    }
+      
 
      
   }

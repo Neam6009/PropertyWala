@@ -34,28 +34,31 @@ const PropertyDetails = () => {
 
   const removePropertyHandler = async () => {
     const confirm = prompt("please enter password to delete this property!");
-		try {
-      const response = await fetch(
-        "http://localhost:3003/properties/removeProperty",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId : user._id,password :confirm , propertyId : property._id}),
+    if(confirm){
+      try {
+        const response = await fetch(
+          "http://localhost:3003/properties/removeProperty",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId : user._id,password :confirm , propertyId : property._id}),
+          }
+        );
+          const data =  await response.json();
+  
+        if (data.success) {
+          alert(data.success);
+          navigate("/profile");
+        } else {
+          alert(data.error)
         }
-      );
-        const data =  await response.json();
-
-      if (data.success) {
-        alert(data.success);
-        navigate("/profile");
-      } else {
-        alert(data.error)
+        
+      } catch (error) {
+        console.error("Network error:", error);
       }
-      
-    } catch (error) {
-      console.error("Network error:", error);
+
     }
 	};
 
