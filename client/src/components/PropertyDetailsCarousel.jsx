@@ -25,7 +25,7 @@ const SimpleSliderPd = ({ propertyImage }) => {
           <>
             <div>
               <img
-                style={{ borderRadius: "0.5rem" }}
+                style={{ borderRadius: "0.5rem" , height:"60rem"}}
                 src={img}
                 alt="propertyImage"
               />

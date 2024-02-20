@@ -31,7 +31,10 @@ const PropertyDetails = () => {
               <span>{property.location}, </span>
               <span>{property.locality}</span>
             </div>
+            <div className={classes.dfButtons}>
+            {user && user.email == property.lister.email? <button>Delete</button>: ""}
             {user && <button>favourite</button>}
+            </div>
           </div>
           <div className={classes.pdCarousel}>
             <SimpleSliderPd propertyImage={property.propertyImage} />

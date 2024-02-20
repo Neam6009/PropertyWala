@@ -19,11 +19,18 @@
   color: rgb(178, 178, 241);
 }
 
+.dfButtons{
+  display: flex;
+  gap: 1rem;
+}
+
 .pdHeader button {
   font-size: medium;
-  padding: 0rem 3rem;
+  padding: 1.3rem 3rem;
   border: #6454f1 solid;
   border-radius: 0.5rem;
+  width: 50%;
+  text-align: center;
 }
 
 .headerLabels {
