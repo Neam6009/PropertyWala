@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const propertyModel = require("../models/property_model");
+const bcrypt = require("bcryptjs");
+
 const userModel = require("../models/user_model")
 const { compareSync } = require("bcryptjs");
 
@@ -8,8 +10,6 @@ mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 exports.getAllProperties = async (req, res, next) => {
 	try {
 		let propertyArray = await propertyModel.Property.find({});
-
-		console.log(propertyArray);
 		res.status(200).json(propertyArray);
 	} catch (error) {
 		res.status(400).json({ error });
@@ -19,7 +19,7 @@ exports.getAllProperties = async (req, res, next) => {
 exports.getPropertiesByUser = async (req, res) => {
 	const userId = req.params.id;
 	const properties = await propertyModel.Property.find({ user_id: userId });
-	console.log(properties);
+
 	res.status(200).json(properties);
 };
 
@@ -27,7 +27,7 @@ exports.getWishlistByID = async(req,res)=>{
 	const userId = req.params.uid;
 	const properties = await propertyModel.Property.find({});
 	const user = await userModel.User.findById(userId)
-	console.log(user);
+
 	const wish = [];
 
 	if(properties.length > 0 && user.wishlist.length>0){
@@ -60,19 +60,35 @@ exports.checkWishlist = async (req,res)=>{
 	}
 }
 
-exports.removeProperty = async (req, res) => {
+exports.deleteProperty = async (req, res) => {
+	const password = req.body.password;
+	const userId = req.body.userId;
+	const propertyId = req.body.propertyId;
+
+	const user = await userModel.User.findById(userId);
+	const property = propertyModel.Property.findById(propertyId);
+
+	if( await bcrypt.compare(password, user.password)){
+		await property.deleteOne();
+		return res.json({success: "Property has been successfully deleted!"})
+	}else{
+		return res.json({error:"wrong password!"})
+	}
+};
+
+exports.removeProperty = async (req,res) =>{
 	const propertyId = req.params.id;
 	propertyModel.Property.deleteOne({ _id: propertyId }).then(() =>
 		console.log("deleted")
 	);
 	res.status(200).json({ result: "done" });
-};
+}
 
 exports.addPropertyToWishlist = async (req, res) => {
     try {
         const propertyId = req.params.pid;
         const userId = req.params.uid;
-        console.log(propertyId, userId);
+
 
         // Find the user by id
         const user = await userModel.User.findById(userId);
@@ -90,7 +106,7 @@ exports.addPropertyToWishlist = async (req, res) => {
         user.wishlist.push(propertyId);
         await user.save();
 
-        console.log(user);
+     
         return res.status(200).json({ message: "Property added to wishlist successfully" });
     } catch (error) {
         console.error(error);
@@ -102,7 +118,7 @@ exports.removePropertyFromWishlist = async (req, res) => {
     try {
         const propertyId = req.params.pid;
         const userId = req.params.uid;
-        console.log(propertyId, userId);
+  
 
         // Find the user by id
         const user = await userModel.User.findById(userId);
@@ -121,7 +137,7 @@ exports.removePropertyFromWishlist = async (req, res) => {
         user.wishlist.splice(propertyIndex, 1);
         await user.save();
 
-        console.log(user);
+
         return res.status(200).json({ message: "Property removed from wishlist successfully" });
     } catch (error) {
         console.error(error);
@@ -148,7 +164,7 @@ exports.insertProperty = async (req, res) => {
 	const property = req.body.property;
 	const user_id = req.body.user_id;
 	const images = req.body.images;
-	console.log(images);
+
 
 	await propertyModel.Property.create({
 		name: property.propertyName,
@@ -269,7 +285,7 @@ getPropertiesByFilters = async (type, location, query) => {
 exports.getPropertiesByLocation = async (req, res) => {
 	const location = req.params.location;
 	const properties = await Property.find({ location });
-	console.log(properties);
+
 	res.send(properties);
 };
 

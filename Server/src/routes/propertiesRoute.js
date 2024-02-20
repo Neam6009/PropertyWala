@@ -15,6 +15,7 @@ router.get("/checkWishlist/:uid/:pid",propertyController.checkWishlist);
 
 router.post("/removeFromWishlist/:uid/:pid",propertyController.removePropertyFromWishlist);
 router.post("/addToWishlist/:uid/:pid",propertyController.addPropertyToWishlist);
-router.post("/remove/:id", propertyController.removeProperty);
+router.post("/remove/:id", propertyController.removeProperty);//this is used by the admin 
+router.post("/removeProperty", propertyController.deleteProperty); // this is used by the user
 router.post("/listProperty", propertyController.insertProperty);
 module.exports = router;

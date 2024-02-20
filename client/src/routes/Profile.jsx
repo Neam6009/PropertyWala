@@ -194,7 +194,7 @@ const Profile = () => {
   };
 
   const deleteAccountHandler = async()=>{
-    const confirm = prompt("please enter password to delete your account!")
+    const confirm = prompt("please enter your password to delete your account!")
 
       try {
         const response = await fetch(

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/PropertyDetails.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLoaderData, useLocation, useParams } from "react-router-dom";
+import { Link, useLoaderData, useLocation, useParams,useNavigate } from "react-router-dom";
 import SimpleSliderPd from "../components/PropertyDetailsCarousel";
 
 
@@ -9,6 +9,7 @@ import SimpleSliderPd from "../components/PropertyDetailsCarousel";
 const PropertyDetails = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
   const properties = useLoaderData();
@@ -29,13 +30,34 @@ const PropertyDetails = () => {
     console.log(wishlist)
 }, [location,user]);
  
-  // console.log(property);
+ 
 
-  // const removePropertyHandler = async () => {
-	// 	fetch(`http://localhost:3003/properties/remove/${property._id}`, {
-	// 		method: "POST",
-	// 	}).then(() => setDeleted(true));
-	// };
+  const removePropertyHandler = async () => {
+    const confirm = prompt("please enter password to delete this property!");
+		try {
+      const response = await fetch(
+        "http://localhost:3003/properties/removeProperty",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId : user._id,password :confirm , propertyId : property._id}),
+        }
+      );
+        const data =  await response.json();
+
+      if (data.success) {
+        alert(data.success);
+        navigate("/profile");
+      } else {
+        alert(data.error)
+      }
+      
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+	};
 
 
   
@@ -73,7 +95,7 @@ const PropertyDetails = () => {
               <span>{property.locality}</span>
             </div>
             <div className={classes.dfButtons}>
-            {user && user.email == property.lister.email? <button>Delete</button>: ""}
+            {user && user.email == property.lister.email? <button onClick={removePropertyHandler}>Delete</button>: ""}
             {user && wishlist?  <button onClick={wishListHandler}>Wishlisted</button> : <button onClick={wishListHandler}>Wishlist</button>}
             </div>
           </div>
