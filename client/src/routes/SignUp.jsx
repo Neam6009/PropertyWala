@@ -12,8 +12,6 @@ const SignUp = () => {
 	const registerHandler = async (event) => {
 		event.preventDefault();
 
-		console.log(email, name, password);
-
 		try {
 			const response = await fetch(
 				"http://localhost:3003/auth/register",

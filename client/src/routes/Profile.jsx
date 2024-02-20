@@ -1,17 +1,29 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import classes from "../assets/Styles/profile.module.css";
 import { useState } from "react";
 import PropertyCard from "../components/PropertyCard";
 import { useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/auth/authSlice";
+
+
+
 
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
   const [profileContentType, setProfileContentType] = useState(1);
   const [properties, setProperties] = useState([]);
   const [wishList,setWishList] = useState([]);
+  const [changePasswordBox, setChangePasswordBox ] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [ReNewPassword,setReNewPassword] = useState("");
+  const [error,setError] = useState(" ");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +82,74 @@ const Profile = () => {
     </div>
   );
 
+  
+  const changePasswordHandler = async () => {
+   
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+    if (oldPassword.length === 0 || newPassword.length === 0 || ReNewPassword.length === 0) {
+        setError("All password fields are required!");
+        return;
+    }
+
+    if (newPassword !== ReNewPassword) {
+        setError("Please make sure both the new passwords match!");
+        return;
+    }
+
+    if (oldPassword === newPassword) {
+        setError("New password cannot be the same as the old password!");
+        return;
+    }
+
+    if (!passwordRegex.test(newPassword)) {
+        setError("New password should contain lower case, upper case, number, and minimum length of 8!");
+        return;
+    }
+
+    try {
+			const response = await fetch(
+				"http://localhost:3003/auth/changePassword",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ userId : user._id, oldPassword: oldPassword,newPassword : newPassword }),
+				}
+			);
+        const data =  await response.json();
+
+			if (data.success) {
+				setError(data.success);
+        alert("your password has been successfully changed!")
+        setChangePasswordBox(false);
+        setOldPassword("");
+        setNewPassword("");
+        setReNewPassword("");
+        setError(""); 
+			} else {
+        setOldPassword("");
+				setError(data.error);
+			}
+      
+		} catch (error) {
+			console.error("Network error:", error);
+		}
+   
+}
+
+
+  const changePassword = (
+    <div className={classes.changePasswordBox}>
+        <input type="password" placeholder="Enter new old password" value={oldPassword} onChange={(e=> setOldPassword(e.target.value))}/>
+        <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e=> setNewPassword(e.target.value))}/>
+        <input type="password" placeholder="Re enter new password" value={ReNewPassword} onChange={(e=> setReNewPassword(e.target.value))}/>
+        <button className={classes.cpButton} onClick={changePasswordHandler}>Change Password!</button>
+        <p>{error}</p>
+    </div>
+  )
+
   switch (profileContentType) {
     case 1:
       profileContent = profileContent1;
@@ -92,11 +172,69 @@ const Profile = () => {
     setProfileContentType(type);
   };
 
+  const changePasswordBoxHandler = ()=>{
+    changePasswordBox? setChangePasswordBox(false): setChangePasswordBox(true)
+  }
+
+  const logOutHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:3003/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      dispatch(setUser(null));
+    } catch (error) {
+      // Handle network errors
+      console.error("Network error:", error);
+    }
+  };
+
+  const deleteAccountHandler = async()=>{
+    const confirm = prompt("please enter password to delete your account!")
+
+      try {
+        const response = await fetch(
+          "http://localhost:3003/auth/deleteUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId : user._id,password :confirm }),
+          }
+        );
+          const data =  await response.json();
+  
+        if (data.success) {
+          alert(data.success);
+          logOutHandler();
+          navigate("/");
+        } else {
+          alert(data.error)
+        }
+        
+      } catch (error) {
+        console.error("Network error:", error);
+      }
+
+     
+  }
+
+ 
+
   return (
-    <div className={classes.profileAll}>
+    
+    <div >
+      {!user? "please login to view your profile page" :  
+      <div className={classes.profileAll}>
+      {changePasswordBox && changePassword}
       <div className={classes.userDetails}>
         <h2>Your Profile</h2>
-        <p className={classes.userIcon}>N</p>
+        <p className={classes.userIcon}>{user.name[0]} </p>
         <p>{user?.name}</p>
         <div className={classes.userDetailsStats}>
           
@@ -105,12 +243,12 @@ const Profile = () => {
             <p className={classes.userStatsLabel}>properties posted</p>
           </div>
           <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>{user?.wishlist.length}</p>
+            <p className={classes.userStatsNumber}>{wishList.length}</p>
             <p className={classes.userStatsLabel}>properties in wishlist</p>
           </div>
         </div>
-        <button className={classes.cpButton}>Change Password</button>
-        <button className={classes.daButton}> Delete Account</button>
+        <button className={classes.cpButton} onClick={changePasswordBoxHandler}>Change Password</button>
+        <button className={classes.daButton} onClick={deleteAccountHandler}> Delete Account</button>
       </div>
       <div className={classes.userPropertyDetails}>
         <div className={classes.upNav}>
@@ -142,6 +280,11 @@ const Profile = () => {
         <div className={classes.userPropertyContent}>{profileContent}</div>
       </div>
     </div>
+
+}
+  </div>
+  
+    
   );
 };
 

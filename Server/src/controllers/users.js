@@ -96,6 +96,41 @@ exports.register = async (req, res) => {
   });
 };
 
+exports.changePassword = async (req,res) =>{
+  console.log(req.body);
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  const userId = req.body.userId;
+
+  const user = await userModel.User.findById(userId);
+  if(await bcrypt.compare(oldPassword, user.password)){
+  let hashedPassword = await bcrypt.hash(newPassword, 8);
+
+    user.password = hashedPassword;
+    user.save();
+    res.json({success:"your password has been successfully changed!"})
+  }else{
+    return res.json({error: "please verify your old password"})
+  }
+
+}
+
+exports.deleteUser = async(req,res)=>{
+
+  const password = req.body.password;
+  const userId = req.body.userId;
+
+  const user = await userModel.User.findById(userId);
+  if(await bcrypt.compare(password, user.password)){
+    await user.deleteOne();
+    return res.json({success: "your account has been deleted!"});
+  }else{
+    return res.json({error:"wrong password!"});
+  }
+
+
+}
+
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.joes) {
     try {
