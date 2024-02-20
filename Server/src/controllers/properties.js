@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const propertyModel = require("../models/property_model");
+const userModel = require("../models/user_model")
 const { compareSync } = require("bcryptjs");
 
 mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
@@ -22,6 +23,43 @@ exports.getPropertiesByUser = async (req, res) => {
 	res.status(200).json(properties);
 };
 
+exports.getWishlistByID = async(req,res)=>{
+	const userId = req.params.uid;
+	const properties = await propertyModel.Property.find({});
+	const user = await userModel.User.findById(userId)
+	console.log(user);
+	const wish = [];
+
+	if(properties.length > 0 && user.wishlist.length>0){
+		for(let i = 0 ; i < properties.length; i++){
+			for(let j = 0; j < user.wishlist.length; j++){
+				if(properties[i]._id == user.wishlist[j]){
+					wish.push(properties[i]);
+				}else{
+	
+				}
+			}
+		}
+	}
+
+	res.status(200).json(wish);
+	
+
+}
+
+exports.checkWishlist = async (req,res)=>{
+	const propertyId = req.params.pid;
+    const userId = req.params.uid;
+	const user = await userModel.User.findById(userId);
+	const wishlist = user.wishlist;
+	if(wishlist.includes(propertyId)){
+		res.status(200).json({result : true})
+	}else{
+		res.status(200).json({result : false})
+
+	}
+}
+
 exports.removeProperty = async (req, res) => {
 	const propertyId = req.params.id;
 	propertyModel.Property.deleteOne({ _id: propertyId }).then(() =>
@@ -29,6 +67,68 @@ exports.removeProperty = async (req, res) => {
 	);
 	res.status(200).json({ result: "done" });
 };
+
+exports.addPropertyToWishlist = async (req, res) => {
+    try {
+        const propertyId = req.params.pid;
+        const userId = req.params.uid;
+        console.log(propertyId, userId);
+
+        // Find the user by id
+        const user = await userModel.User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Initialize wishlist if it's not already defined
+        if (!user.wishlist) {
+            user.wishlist = [];
+        }
+
+        // Update the wishlist
+        user.wishlist.push(propertyId);
+        await user.save();
+
+        console.log(user);
+        return res.status(200).json({ message: "Property added to wishlist successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+exports.removePropertyFromWishlist = async (req, res) => {
+    try {
+        const propertyId = req.params.pid;
+        const userId = req.params.uid;
+        console.log(propertyId, userId);
+
+        // Find the user by id
+        const user = await userModel.User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if propertyId exists in wishlist
+        const propertyIndex = user.wishlist.indexOf(propertyId);
+        if (propertyIndex === -1) {
+            return res.status(404).json({ message: "Property not found in wishlist" });
+        }
+
+        // Remove propertyId from wishlist
+        user.wishlist.splice(propertyIndex, 1);
+        await user.save();
+
+        console.log(user);
+        return res.status(200).json({ message: "Property removed from wishlist successfully" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
 
 exports.propertyDetails = async (req, res) => {
 	let property_id = req.params._id;

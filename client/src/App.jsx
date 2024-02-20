@@ -146,6 +146,7 @@ const router = createBrowserRouter([
         </div>
       </>
     ),
+    loader: propertiesLoader,
   },
   {
     path: "/list-property",

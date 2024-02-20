@@ -4,13 +4,14 @@ import classes from "../assets/Styles/profile.module.css";
 import { useState } from "react";
 import PropertyCard from "../components/PropertyCard";
 import { useEffect } from "react";
+import { useLoaderData, useParams } from "react-router-dom";
+
 
 const Profile = () => {
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
   const [profileContentType, setProfileContentType] = useState(1);
-  const [properties, setProperties] = useState(null);
-  console.log(user);
+  const [properties, setProperties] = useState([]);
+  const [wishList,setWishList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +20,11 @@ const Profile = () => {
       ).then((res) => res.json());
 
       setProperties(properties);
-      console.log(properties);
+
+      const wish = await fetch(
+        `http://localhost:3003/properties/getWishlist/${user._id}`
+      ).then((res) => res.json());
+      setWishList(wish);
     };
     fetchData();
   }, [user]);
@@ -27,23 +32,26 @@ const Profile = () => {
   let profileContent = <></>;
 
   const profileContent1 = (
-    <div>
-      {properties &&
-        (user.wishlist.length == 0 ? (
-          "Please list a property!"
-        ) : (
-          <PropertyCard property={properties[0]} />
-        ))}
-    </div>
-  );
-
+  <div className={classes.yourProperties}>
+    {properties && (
+      properties.length === 0 ? (
+        "Please list a property!"
+      ) : 
+      properties.map((property) => (
+        <PropertyCard key={property._id} property={property} />
+      ))
+    )}
+  </div>
+);
   const profileContent2 = (
-    <div>
+    <div className={classes.yourProperties}>
       {properties &&
-        (user.wishlist.length == 0 ? (
+        (wishList.length == 0 ? (
           "wishlist empty"
         ) : (
-          <PropertyCard property={user.wishlist[0]} />
+          wishList.map((wish) => (
+            <PropertyCard key={wish._id} property={wish} />
+          ))
         ))}
     </div>
   );
@@ -58,10 +66,7 @@ const Profile = () => {
         <p>Email </p>
         <p className={classes.pfLabel2}>{user?.email}</p>
       </div>
-      <div className={classes.pfContact3}>
-        <p>Mobile number </p>
-        <p className={classes.pfLabel3}>9234567892</p>
-      </div>
+      
     </div>
   );
 
@@ -92,18 +97,15 @@ const Profile = () => {
       <div className={classes.userDetails}>
         <h2>Your Profile</h2>
         <p className={classes.userIcon}>N</p>
-        <p>User Name</p>
+        <p>{user?.name}</p>
         <div className={classes.userDetailsStats}>
+          
           <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>5</p>
-            <p className={classes.userStatsLabel}>properties checked</p>
-          </div>
-          <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>7</p>
+            <p className={classes.userStatsNumber}>{properties.length}</p>
             <p className={classes.userStatsLabel}>properties posted</p>
           </div>
           <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>15</p>
+            <p className={classes.userStatsNumber}>{user?.wishlist.length}</p>
             <p className={classes.userStatsLabel}>properties in wishlist</p>
           </div>
         </div>

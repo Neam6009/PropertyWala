@@ -77,6 +77,14 @@
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
+.yourProperties{
+ display: flex;
+ flex-wrap: wrap;
+ gap: 2rem;
+ overflow-y: scroll;
+ height: 26rem;
+ max-width: 45rem;
+}
 .upNav {
   padding: 3rem;
   display: flex;
@@ -131,8 +139,9 @@
   justify-content: center;
   align-items: left;
   flex-direction: column;
-  padding-left: 3rem;
+  padding-left: 11rem;
   gap: 4rem;
+  padding-top: 8rem;
   font-size: x-large;
 }
 

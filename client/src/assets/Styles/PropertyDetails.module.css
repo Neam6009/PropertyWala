@@ -29,16 +29,32 @@
   padding: 1.3rem 3rem;
   border: #6454f1 solid;
   border-radius: 0.5rem;
-  width: 50%;
+  width: 10rem;
   text-align: center;
+  cursor: pointer;
+  color: #7469f0;
 }
 
-.headerLabels {
+.pdHeader button:hover{
+  background-color: #6454f1;
+  color: white;
 }
+
 
 .pdCarousel {
-  margin: 3rem;
+  padding: 3rem;
 }
+
+.pdCarousel button{
+  background-color: #7469f0;
+  border-radius: 1rem;
+}
+
+.pdCarousel button:hover{
+  background-color: #5648f6;
+
+}
+
 
 .pdStats {
   display: flex;
@@ -46,6 +62,7 @@
   border: #a68bfe solid;
   border-radius: 1rem;
 }
+
 
 .ownerParentContainer {
   background-color: rgb(222, 222, 222);

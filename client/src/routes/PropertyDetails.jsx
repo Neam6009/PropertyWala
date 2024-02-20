@@ -4,14 +4,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLoaderData, useLocation, useParams } from "react-router-dom";
 import SimpleSliderPd from "../components/PropertyDetailsCarousel";
 
+
+
 const PropertyDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
 
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
   const properties = useLoaderData();
   const property = properties.find((e) => e._id == id);
+  const [wishlist,setWishlist] =useState();
+
+
+  useEffect(() => {
+    const setWishListFunction = async ()=>{
+
+    const wish = await fetch(
+      `http://localhost:3003/properties/checkWishlist/${user._id}/${property._id}`
+    ).then((res) => res.json());
+    setWishlist(wish.result)
+    }
+    
+    setWishListFunction();
+    console.log(wishlist)
+}, [location,user]);
+ 
   // console.log(property);
+
+  // const removePropertyHandler = async () => {
+	// 	fetch(`http://localhost:3003/properties/remove/${property._id}`, {
+	// 		method: "POST",
+	// 	}).then(() => setDeleted(true));
+	// };
+
+
+  
 
   const [info, setInfo] = useState(false);
 
@@ -20,6 +47,20 @@ const PropertyDetails = () => {
   const getInfoHandler = () => {
     info ? setInfo(false) : setInfo(true);
   };
+
+  const wishListHandler = async ()=>{
+    if(wishlist){
+      fetch(`http://localhost:3003/properties/removeFromWishlist/${user._id}/${property._id}`, {
+			method: "POST",
+		}).then(setWishlist(false))
+
+    }else{
+      fetch(`http://localhost:3003/properties/addToWishlist/${user._id}/${property._id}`, {
+			method: "POST",
+		}).then(setWishlist(true))
+
+    }
+  }
 
   return (
     <div className={classes.propertyDetailsAll}>
@@ -33,7 +74,7 @@ const PropertyDetails = () => {
             </div>
             <div className={classes.dfButtons}>
             {user && user.email == property.lister.email? <button>Delete</button>: ""}
-            {user && <button>favourite</button>}
+            {user && wishlist?  <button onClick={wishListHandler}>Wishlisted</button> : <button onClick={wishListHandler}>Wishlist</button>}
             </div>
           </div>
           <div className={classes.pdCarousel}>
