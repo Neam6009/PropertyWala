@@ -4,6 +4,7 @@ const { promisify } = require("util");
 
 const mongoose = require("mongoose");
 const userModel = require("../models/user_model");
+const multer = require('multer');
 
 mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
@@ -209,6 +210,13 @@ exports.admin = async (req, res) => {
 
   res.end();
 };
+
+exports.setProfileImage = async (imgId,userId)=>{
+  const user = await userModel.User.findById(userId);
+  user.profileImage = imgId;
+  await user.save();
+
+}
 
 exports.getAllUsers = async (req, res) => {
   const users = await userModel.User.find(); //const users = await userModel.User.find({ _id: { $ne: req.user._id } });

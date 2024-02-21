@@ -9,6 +9,7 @@ const users = new Schema({
   isAdmin: Boolean,
   isCertified: Boolean,
   wishlist: Array,
+  profileImage: String
 });
 
 const User = mongoose.model('User', users);

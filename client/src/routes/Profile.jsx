@@ -7,8 +7,7 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/auth/authSlice";
-
-
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 
 
@@ -18,12 +17,16 @@ const Profile = () => {
   const navigate = useNavigate();
   const [profileContentType, setProfileContentType] = useState(1);
   const [properties, setProperties] = useState([]);
-  const [wishList,setWishList] = useState([]);
-  const [changePasswordBox, setChangePasswordBox ] = useState(false);
+  const [wishList, setWishList] = useState([]);
+  const [changePasswordBox, setChangePasswordBox] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [ReNewPassword,setReNewPassword] = useState("");
-  const [error,setError] = useState(" ");
+  const [ReNewPassword, setReNewPassword] = useState("");
+  const [error, setError] = useState(" ");
+  const [image, setImage] = useState();
+  const [pimg, setpImg] = useState();
+  const [rerender, setRerender] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,24 +40,30 @@ const Profile = () => {
         `http://localhost:3003/properties/getWishlist/${user._id}`
       ).then((res) => res.json());
       setWishList(wish);
+
+
+      if (user.profileImage) {
+        setpImg(`http://localhost:3003/profileImage/${user?.profileImage}`);
+      }
     };
+
     fetchData();
-  }, [user]);
+  }, [user, rerender]);
 
   let profileContent = <></>;
 
   const profileContent1 = (
-  <div className={classes.yourProperties}>
-    {properties && (
-      properties.length === 0 ? (
-        "Please list a property!"
-      ) : 
-      properties.map((property) => (
-        <PropertyCard key={property._id} property={property} />
-      ))
-    )}
-  </div>
-);
+    <div className={classes.yourProperties}>
+      {properties && (
+        properties.length === 0 ? (
+          "Please list a property!"
+        ) :
+          properties.map((property) => (
+            <PropertyCard key={property._id} property={property} />
+          ))
+      )}
+    </div>
+  );
   const profileContent2 = (
     <div className={classes.yourProperties}>
       {properties &&
@@ -78,75 +87,75 @@ const Profile = () => {
         <p>Email </p>
         <p className={classes.pfLabel2}>{user?.email}</p>
       </div>
-      
+
     </div>
   );
 
-  
+
   const changePasswordHandler = async () => {
-   
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
     if (oldPassword.length === 0 || newPassword.length === 0 || ReNewPassword.length === 0) {
-        setError("All password fields are required!");
-        return;
+      setError("All password fields are required!");
+      return;
     }
 
     if (newPassword !== ReNewPassword) {
-        setError("Please make sure both the new passwords match!");
-        return;
+      setError("Please make sure both the new passwords match!");
+      return;
     }
 
     if (oldPassword === newPassword) {
-        setError("New password cannot be the same as the old password!");
-        return;
+      setError("New password cannot be the same as the old password!");
+      return;
     }
 
     if (!passwordRegex.test(newPassword)) {
-        setError("New password should contain lower case, upper case, number, and minimum length of 8!");
-        return;
+      setError("New password should contain lower case, upper case, number, and minimum length of 8!");
+      return;
     }
 
     try {
-			const response = await fetch(
-				"http://localhost:3003/auth/changePassword",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ userId : user._id, oldPassword: oldPassword,newPassword : newPassword }),
-				}
-			);
-        const data =  await response.json();
+      const response = await fetch(
+        "http://localhost:3003/auth/changePassword",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: user._id, oldPassword: oldPassword, newPassword: newPassword }),
+        }
+      );
+      const data = await response.json();
 
-			if (data.success) {
-				setError(data.success);
+      if (data.success) {
+        setError(data.success);
         alert("your password has been successfully changed!")
         setChangePasswordBox(false);
         setOldPassword("");
         setNewPassword("");
         setReNewPassword("");
-        setError(""); 
-			} else {
+        setError("");
+      } else {
         setOldPassword("");
-				setError(data.error);
-			}
-      
-		} catch (error) {
-			console.error("Network error:", error);
-		}
-   
-}
+        setError(data.error);
+      }
+
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+
+  }
 
 
   const changePassword = (
     <div className={classes.changePasswordBox}>
-        <input type="password" placeholder="Enter new old password" value={oldPassword} onChange={(e=> setOldPassword(e.target.value))}/>
-        <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e=> setNewPassword(e.target.value))}/>
-        <input type="password" placeholder="Re enter new password" value={ReNewPassword} onChange={(e=> setReNewPassword(e.target.value))}/>
-        <button className={classes.cpButton} onClick={changePasswordHandler}>Change Password!</button>
-        <p>{error}</p>
+      <input type="password" placeholder="Enter new old password" value={oldPassword} onChange={(e => setOldPassword(e.target.value))} />
+      <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e => setNewPassword(e.target.value))} />
+      <input type="password" placeholder="Re enter new password" value={ReNewPassword} onChange={(e => setReNewPassword(e.target.value))} />
+      <button className={classes.cpButton} onClick={changePasswordHandler}>Change Password!</button>
+      <p>{error}</p>
     </div>
   )
 
@@ -172,8 +181,8 @@ const Profile = () => {
     setProfileContentType(type);
   };
 
-  const changePasswordBoxHandler = ()=>{
-    changePasswordBox? setChangePasswordBox(false): setChangePasswordBox(true)
+  const changePasswordBoxHandler = () => {
+    changePasswordBox ? setChangePasswordBox(false) : setChangePasswordBox(true)
   }
 
   const logOutHandler = async () => {
@@ -193,10 +202,10 @@ const Profile = () => {
     }
   };
 
-  const deleteAccountHandler = async()=>{
+  const deleteAccountHandler = async () => {
     const confirm = prompt("please enter your password to delete your account!")
 
-    if(confirm){
+    if (confirm) {
 
       try {
         const response = await fetch(
@@ -206,11 +215,11 @@ const Profile = () => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userId : user._id,password :confirm }),
+            body: JSON.stringify({ userId: user._id, password: confirm }),
           }
         );
-          const data =  await response.json();
-  
+        const data = await response.json();
+
         if (data.success) {
           alert(data.success);
           logOutHandler();
@@ -218,78 +227,117 @@ const Profile = () => {
         } else {
           alert(data.error)
         }
-        
+
       } catch (error) {
         console.error("Network error:", error);
       }
 
     }
-      
 
-     
   }
 
- 
+
+  const uploadImageHandler = async (e) => {
+    e.preventDefault();
+    setImage(e.target[0].files[0])
+    if (image) {
+      const formData = new FormData();
+      formData.append('profileImage', image);
+      formData.append('userId', user._id)
+      try {
+        const response = await fetch("http://localhost:3003/uploadProfileImage", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (data.success) {
+          alert(data.success)
+          setImage();
+          triggerRerender();
+        } else {
+          data.error;
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+      }
+    }
+  }
 
   return (
-    
     <div >
-      {!user? "please login to view your profile page" :  
-      <div className={classes.profileAll}>
-      {changePasswordBox && changePassword}
-      <div className={classes.userDetails}>
-        <h2>Your Profile</h2>
-        <p className={classes.userIcon}>{user.name[0]} </p>
-        <p>{user?.name}</p>
-        <div className={classes.userDetailsStats}>
-          
-          <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>{properties.length}</p>
-            <p className={classes.userStatsLabel}>properties posted</p>
+      {!user ? "please login to view your profile page" :
+        <div className={classes.profileAll}>
+          {changePasswordBox && changePassword}
+          <div className={classes.userDetails}>
+            <h2>Your Profile</h2>
+            <div className={classes.userImage}>
+              {user.profileImage ?
+                <>
+                  <img className={classes.userImg} src={pimg} alt="profileImage" />
+                </>
+                : <p className={classes.userIcon}>{user.name[0]}</p>}
+              <label htmlFor="profileImage" className={classes.profileImgLabel}><AddAPhotoIcon className={classes.AddAPhotoIcon} /></label>
+              <form
+                encType="multipart/form-data"
+                onSubmit={uploadImageHandler}
+
+              >   <input id="profileImage" type="file" accept="images/*"
+                name="profileImage" className={classes.profileImgInput} placeholder="update image"
+                onChange={(e) => { setImage(e.target.files[0]) }} />
+                {image ? <><button className={classes.uploadButton} type="submit" >upload</button> <button className={classes.cancelupload} onClick={e => setImage()}>cancel</button></> : ""}
+              </form>
+              <p className={classes.imageName}>{image ? image.name : ""}</p>
+            </div>
+            <p>{user?.name}</p>
+            <div className={classes.userDetailsStats}>
+
+              <div className={classes.userStats}>
+                <p className={classes.userStatsNumber}>{properties.length}</p>
+                <p className={classes.userStatsLabel}>properties posted</p>
+              </div>
+              <div className={classes.userStats}>
+                <p className={classes.userStatsNumber}>{wishList.length}</p>
+                <p className={classes.userStatsLabel}>properties in wishlist</p>
+              </div>
+            </div>
+            <button className={classes.cpButton} onClick={changePasswordBoxHandler}>Change Password</button>
+            <button className={classes.daButton} onClick={deleteAccountHandler}> Delete Account</button>
           </div>
-          <div className={classes.userStats}>
-            <p className={classes.userStatsNumber}>{wishList.length}</p>
-            <p className={classes.userStatsLabel}>properties in wishlist</p>
+          <div className={classes.userPropertyDetails}>
+            <div className={classes.upNav}>
+              <div
+                className={classes.upNavButton}
+                onClick={() => {
+                  profileContentHandler(1);
+                }}
+              >
+                Your Properties
+              </div>
+              <div
+                className={classes.upNavButton}
+                onClick={() => {
+                  profileContentHandler(2);
+                }}
+              >
+                WhishList
+              </div>
+              <div
+                className={classes.upNavButton}
+                onClick={() => {
+                  profileContentHandler(3);
+                }}
+              >
+                Contact
+              </div>
+            </div>
+            <div className={classes.userPropertyContent}>{profileContent}</div>
           </div>
         </div>
-        <button className={classes.cpButton} onClick={changePasswordBoxHandler}>Change Password</button>
-        <button className={classes.daButton} onClick={deleteAccountHandler}> Delete Account</button>
-      </div>
-      <div className={classes.userPropertyDetails}>
-        <div className={classes.upNav}>
-          <div
-            className={classes.upNavButton}
-            onClick={() => {
-              profileContentHandler(1);
-            }}
-          >
-            Your Properties
-          </div>
-          <div
-            className={classes.upNavButton}
-            onClick={() => {
-              profileContentHandler(2);
-            }}
-          >
-            WhishList
-          </div>
-          <div
-            className={classes.upNavButton}
-            onClick={() => {
-              profileContentHandler(3);
-            }}
-          >
-            Contact
-          </div>
-        </div>
-        <div className={classes.userPropertyContent}>{profileContent}</div>
-      </div>
+
+      }
     </div>
 
-}
-  </div>
-  
-    
+
   );
 };
 
