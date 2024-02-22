@@ -13,6 +13,8 @@ import RbsTabs from "../components/RbsTabs.jsx";
 import { useSelector } from "react-redux";
 import { Link, useLoaderData } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
   const properties = useLoaderData();
@@ -43,10 +45,12 @@ const Home = () => {
       },
     });
     setMail("");
+    toast.success("email registered successfully!")
   };
 
   return (
     <div className={classes.all}>
+      <ToastContainer />
       <header>
         <div className={classes.HeroBackground}>
           <div className={classes.headerPart1}>
@@ -206,18 +210,18 @@ const Home = () => {
             sell.
           </span>
         </div>
-        <div className={classes.emailInputFields}>
+        <form className={classes.emailInputFields} onSubmit={addMailHandler}>
           <input
-            type="mail"
+            type="email"
             id="addMail"
             placeholder="Enter your email address"
             value={mail}
             onChange={(e) => setMail(e.target.value)}
           />
-          <button type="submit" onClick={addMailHandler}>
+          <button type="submit" >
             Submit
           </button>
-        </div>
+        </form>
         <span
           className={`${classes.display_none} ${classes.greyText}`}
           id="thanksMessage"

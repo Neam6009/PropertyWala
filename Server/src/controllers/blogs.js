@@ -42,6 +42,7 @@ exports.insertBlog = async (req, res) => {
 		date: day,
 		blogImage: image,
 	});
+	return res.send("Blog uploaded");
 };
 
 exports.removeBlog = async (req, res) => {

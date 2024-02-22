@@ -19,6 +19,7 @@ const ComposeBlog = () => {
   const typeHandler = (type) => {
     setType(type);
     setContent("");
+    setBlogContent("");
   };
 
   useEffect(() => {
@@ -32,6 +33,8 @@ const ComposeBlog = () => {
       .catch((error) => console.error('Error fetching CSRF token:', error));
 
   }, []);
+
+  const ref = useRef();
 
   const blogSubmitHandler = async (e) => {
     e.preventDefault();
@@ -48,7 +51,7 @@ const ComposeBlog = () => {
     const url = res.data.secure_url;
 
     try {
-      const response = await fetch("http://localhost:3003/blogs/insert", {
+      fetch("http://localhost:3003/blogs/insert", {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -56,17 +59,23 @@ const ComposeBlog = () => {
           'CSRF-Token': csrfToken, // Include CSRF token in the header
         },
         body: JSON.stringify({ user, image: url, blog }),
-      });
+      }).then(() => {
+
+        console.log("djfklsaj")
+        setBlogContent("")
+        setBlogTitle("")
+        ref.current.value = "";
+        setImage()
+      }
+      )
 
     } catch (error) {
       // Handle network errors
       console.error("Network error:", error);
     }
 
-    await setBlogContent("")
-    await setBlogTitle("")
-    await setImage("")
   };
+  console.log(blogContent, blogTitle)
 
   const editor = useRef(null);
   const [subject, setSubject] = useState("");
@@ -162,6 +171,7 @@ const ComposeBlog = () => {
             <input
               type="file"
               name="blogImage"
+              ref={ref}
               onChange={(e) => setImage(e.target.files[0])}
               required
             />

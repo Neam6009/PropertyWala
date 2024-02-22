@@ -9,6 +9,7 @@ const fs = require("fs");
 const path = require("path");
 const morgan = require("morgan");
 const csrf = require('csurf');
+let rfs = require("rotating-file-stream");
 
 
 const bodyParser = require("body-parser");
@@ -33,9 +34,18 @@ app.use(cors(corsOptions));
 doenv.config({
   path: "./.env",
 });
-app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms")
+
+let accessLogStream = rfs.createStream("propertyWala.log", {
+  interval: "1h",
+  path: path.join(__dirname, "log"),
+});
+
+morgan.token(
+  "customTokken",
+  "A new :method requires for :url was received. It took :total-time[2] milliseconds to be resolved"
 );
+
+app.use(morgan("customTokken", { stream: accessLogStream }));
 
 app.use(express.static(__dirname + "/profileImages"));
 app.set("view engine", "ejs");
