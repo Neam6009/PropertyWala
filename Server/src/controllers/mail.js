@@ -1,20 +1,20 @@
-const nodemailer = require('nodemailer');
-const mongoose = require('mongoose');
+const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
 
-const user_model = require('../models/user_model');
+const user_model = require("../models/user_model");
 
 const mailSchema = new mongoose.Schema({
   mail: String,
 });
 
-const Mail = new mongoose.model('mail', mailSchema);
+const Mail = new mongoose.model("mail", mailSchema);
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'propertywala1438@gmail.com',
-    pass: 'iyyrlbeuvoxunvnu',
+    user: "propertywala1438@gmail.com",
+    pass: "iyyrlbeuvoxunvnu",
   },
 });
 
@@ -28,10 +28,10 @@ exports.addMail = async (req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions = {
-    from: 'propertywala1438@gmail.com', // sender address
+    from: "propertywala1438@gmail.com", // sender address
     to: mailId, // list of receivers
-    subject: 'Welcome to our service!', // Subject line
-    html: '<b>Thank you for signing up! to our Newsletter</b>', // html body
+    subject: "Welcome to our service!", // Subject line
+    html: "<b>Thank you for signing up! to our Newsletter</b>", // html body
   };
 
   // send mail with defined transport object
@@ -39,7 +39,7 @@ exports.addMail = async (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      console.log('Email sent: ' + info.response);
+      console.log("Email sent: " + info.response);
     }
   });
 
@@ -49,6 +49,8 @@ exports.addMail = async (req, res) => {
 exports.sendMailAll = async (req, res) => {
   const subject = req.body.subject;
   const content = req.body.content;
+  console.log(req.body);
+  console.log(req.body.subject, req.body.content);
 
   const users = await user_model.User.find({});
   const userMails = users.map((user) => user.email);
@@ -56,7 +58,7 @@ exports.sendMailAll = async (req, res) => {
   // setup email data with unicode symbols
   userMails.forEach((mail) => {
     let mailOptions = {
-      from: 'propertywala1438@gmail.com', // sender address
+      from: "propertywala1438@gmail.com", // sender address
       to: mail, // list of receivers
       subject: subject, // Subject line
       html: content, // html body
@@ -66,12 +68,10 @@ exports.sendMailAll = async (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log("Email sent: " + info.response);
       }
     });
   });
 
-  // send mail with defined transport object
-
-  res.redirect('/admin-control');
+  return res.send("Mail sent successfully");
 };

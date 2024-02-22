@@ -41,6 +41,7 @@ const AdminControl = () => {
   //Jodit editor settings
   const editor = useRef(null);
   const [content, setContent] = useState("");
+  const [subject, setSubject] = useState("");
   const config = {
     readonly: false,
     placeholder: "Compose your Mail...",
@@ -88,6 +89,24 @@ const AdminControl = () => {
 
   let AcContent = <></>;
 
+  const allMailHandler = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("subject", subject);
+    formData.append("content", content);
+
+    fetch(`http://localhost:3003/allMail`, {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(formData)),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    setSubject("");
+    setContent("");
+  };
+
   const AcContent1 = (
     <>
       <div className={classes.homeContent}>
@@ -95,9 +114,15 @@ const AdminControl = () => {
         <p>userEmail@gmail.com</p>
       </div>
       <div className={classes.adminForm}>
-        <form action="/allMail" method="post" className={classes.aform}>
+        <form onSubmit={allMailHandler} className={classes.aform}>
           <label htmlFor="subject"></label>
-          <input type="text" placeholder="Enter subject" name="subject" />
+          <input
+            type="text"
+            placeholder="Enter subject"
+            name="subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          />
           <div className={classes.content}>
             <JoditEditor
               className={classes.Jeditor}

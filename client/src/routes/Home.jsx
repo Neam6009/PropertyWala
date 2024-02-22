@@ -16,6 +16,16 @@ import { useState, useEffect } from "react";
 
 const Home = () => {
   const properties = useLoaderData();
+  const [mail, setMail] = useState("");
+
+  const addMailHandler = (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3003/mail/${mail}`, {
+      method: "POST",
+    });
+    setMail("");
+  };
 
   return (
     <div className={classes.all}>
@@ -180,11 +190,15 @@ const Home = () => {
         </div>
         <div className={classes.emailInputFields}>
           <input
-            type="text"
+            type="mail"
             id="addMail"
             placeholder="Enter your email address"
+            value={mail}
+            onChange={(e) => setMail(e.target.value)}
           />
-          <button>Submit</button>
+          <button type="submit" onClick={addMailHandler}>
+            Submit
+          </button>
         </div>
         <span
           className={`${classes.display_none} ${classes.greyText}`}

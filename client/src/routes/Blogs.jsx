@@ -17,6 +17,16 @@ import BLogCardMini from "../components/BLogCardMini";
 const Blogs = () => {
   const blogs = useLoaderData();
   console.log(blogs);
+  const [mail, setMail] = useState("");
+
+  const addMailHandler = (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3003/mail/${mail}`, {
+      method: "POST",
+    });
+    setMail("");
+  };
 
   return (
     <div className={classes.all}>
@@ -34,8 +44,10 @@ const Blogs = () => {
             className={classes.input1}
             type="text"
             placeholder="Enter your email address"
+            value={mail}
+            onChange={(e) => setMail(e.target.value)}
           />
-          <button>Sign up</button>
+          <button onClick={addMailHandler}>Sign up</button>
         </div>
       </header>
       <section>
@@ -96,8 +108,14 @@ const Blogs = () => {
               market!
             </p>
             <span>
-              <input type="email" name="" id="" />
-              <button>Sign Up</button>
+              <input
+                type="email"
+                name=""
+                id=""
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
+              />
+              <button onClick={addMailHandler}>Sign Up</button>
             </span>
 
             <div className={classes.contact}>
