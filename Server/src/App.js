@@ -48,6 +48,7 @@ app.post(
 app.get("/users/all", userController.getAllUsers);
 app.post("/mail/:mailId", mailController.addMail);
 app.post("/allMail", mailController.sendMailAll);
+app.post("/newsletterMail", mailController.sendMailNewsletterAll);
 
 app.post("/certified/:userId/:change", userController.certified);
 app.post("/admin/:userId/:change", userController.admin);
