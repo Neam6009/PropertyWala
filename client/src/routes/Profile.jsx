@@ -26,6 +26,7 @@ const Profile = () => {
   const [image, setImage] = useState();
   const [pimg, setpImg] = useState();
   const [rerender, setRerender] = useState(false);
+  const [csrfToken, setCsrfToken] = useState();
 
 
   useEffect(() => {
@@ -40,6 +41,15 @@ const Profile = () => {
         `http://localhost:3003/properties/getWishlist/${user._id}`
       ).then((res) => res.json());
       setWishList(wish);
+
+      // Fetch CSRF token from the server
+      fetch('http://localhost:3003/csrf-token', {
+        method: 'GET',
+        credentials: 'include',
+      })
+        .then((response) => response.json())
+        .then((data) => setCsrfToken(data.csrfToken))
+        .catch((error) => console.error('Error fetching CSRF token:', error));
 
 
       if (user.profileImage) {
@@ -121,8 +131,10 @@ const Profile = () => {
         "http://localhost:3003/auth/changePassword",
         {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
+            'CSRF-Token': csrfToken, // Include CSRF token in the header
           },
           body: JSON.stringify({ userId: user._id, oldPassword: oldPassword, newPassword: newPassword }),
         }
@@ -192,6 +204,7 @@ const Profile = () => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          'CSRF-Token': csrfToken, // Include CSRF token in the header
         },
       });
 
@@ -214,6 +227,7 @@ const Profile = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              'CSRF-Token': csrfToken, // Include CSRF token in the header
             },
             body: JSON.stringify({ userId: user._id, password: confirm }),
           }
@@ -247,6 +261,10 @@ const Profile = () => {
       try {
         const response = await fetch("http://localhost:3003/uploadProfileImage", {
           method: "POST",
+          credentials: 'include',
+          headers: {
+            'CSRF-Token': csrfToken, // Include CSRF token in the header
+          },
           body: formData,
         });
         const data = await response.json();

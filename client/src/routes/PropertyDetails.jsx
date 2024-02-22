@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/PropertyDetails.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLoaderData, useLocation, useParams,useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useLocation, useParams, useNavigate } from "react-router-dom";
 import SimpleSliderPd from "../components/PropertyDetailsCarousel";
 
 
@@ -14,56 +14,68 @@ const PropertyDetails = () => {
   const user = useSelector((state) => state.auth.user);
   const properties = useLoaderData();
   const property = properties.find((e) => e._id == id);
-  const [wishlist,setWishlist] =useState();
+  const [wishlist, setWishlist] = useState();
+  const [csrfToken, setCsrfToken] = useState();
 
 
   useEffect(() => {
-    const setWishListFunction = async ()=>{
+    const setWishListFunction = async () => {
 
-    const wish = await fetch(
-      `http://localhost:3003/properties/checkWishlist/${user._id}/${property._id}`
-    ).then((res) => res.json());
-    setWishlist(wish.result)
+      const wish = await fetch(
+        `http://localhost:3003/properties/checkWishlist/${user._id}/${property._id}`
+      ).then((res) => res.json());
+      setWishlist(wish.result)
     }
-    
+
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
     setWishListFunction();
     console.log(wishlist)
-}, [location,user]);
- 
- 
+  }, [location, user, csrfToken]);
+
+
 
   const removePropertyHandler = async () => {
     const confirm = prompt("please enter password to delete this property!");
-    if(confirm){
+    if (confirm) {
       try {
         const response = await fetch(
           "http://localhost:3003/properties/removeProperty",
           {
             method: "POST",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
+              'CSRF-Token': csrfToken, // Include CSRF token in the header
             },
-            body: JSON.stringify({ userId : user._id,password :confirm , propertyId : property._id}),
+            body: JSON.stringify({ userId: user._id, password: confirm, propertyId: property._id }),
           }
         );
-          const data =  await response.json();
-  
+        const data = await response.json();
+
         if (data.success) {
           alert(data.success);
           navigate("/profile");
         } else {
           alert(data.error)
         }
-        
+
       } catch (error) {
         console.error("Network error:", error);
       }
 
     }
-	};
+  };
 
 
-  
+
 
   const [info, setInfo] = useState(false);
 
@@ -73,16 +85,24 @@ const PropertyDetails = () => {
     info ? setInfo(false) : setInfo(true);
   };
 
-  const wishListHandler = async ()=>{
-    if(wishlist){
+  const wishListHandler = async () => {
+    if (wishlist) {
       fetch(`http://localhost:3003/properties/removeFromWishlist/${user._id}/${property._id}`, {
-			method: "POST",
-		}).then(setWishlist(false))
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          'CSRF-Token': csrfToken, // Include CSRF token in the header
+        },
+      }).then(setWishlist(false))
 
-    }else{
+    } else {
       fetch(`http://localhost:3003/properties/addToWishlist/${user._id}/${property._id}`, {
-			method: "POST",
-		}).then(setWishlist(true))
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          'CSRF-Token': csrfToken, // Include CSRF token in the header
+        },
+      }).then(setWishlist(true))
 
     }
   }
@@ -98,8 +118,8 @@ const PropertyDetails = () => {
               <span>{property.locality}</span>
             </div>
             <div className={classes.dfButtons}>
-            {user && user.email == property.lister.email? <button onClick={removePropertyHandler}>Delete</button>: ""}
-            {user && wishlist?  <button onClick={wishListHandler}>Wishlisted</button> : <button onClick={wishListHandler}>Wishlist</button>}
+              {user && user.email == property.lister.email ? <button onClick={removePropertyHandler}>Delete</button> : ""}
+              {user && wishlist ? <button onClick={wishListHandler}>Wishlisted</button> : <button onClick={wishListHandler}>Wishlist</button>}
             </div>
           </div>
           <div className={classes.pdCarousel}>

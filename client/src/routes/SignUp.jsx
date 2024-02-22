@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import classes from "../assets/Styles/register.module.css";
 
@@ -8,6 +8,20 @@ const SignUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [name, setName] = useState("");
+	const [csrfToken, setCsrfToken] = useState();
+
+	useEffect(() => {
+		// Fetch CSRF token from the server
+		fetch('http://localhost:3003/csrf-token', {
+			method: 'GET',
+			credentials: 'include',
+		})
+			.then((response) => response.json())
+			.then((data) => setCsrfToken(data.csrfToken))
+			.catch((error) => console.error('Error fetching CSRF token:', error));
+
+	}, []);
+
 
 	const registerHandler = async (event) => {
 		event.preventDefault();
@@ -17,8 +31,10 @@ const SignUp = () => {
 				"http://localhost:3003/auth/register",
 				{
 					method: "POST",
+					credentials: 'include',
 					headers: {
 						"Content-Type": "application/json",
+						'CSRF-Token': csrfToken, // Include CSRF token in the header
 					},
 					body: JSON.stringify({ email, name, password }),
 				}

@@ -1,8 +1,10 @@
 import classes from "../assets/Styles/listProperty.module.css";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cloudUrl = "https://api.cloudinary.com/v1_1/diya8tmxd/image/upload";
 const preset = "ngjbzrk4";
@@ -11,6 +13,19 @@ const ListProperty = () => {
   const user = useSelector((state) => state.auth.user);
   console.log(user);
   const [images, setImages] = useState([]);
+  const [csrfToken, setCsrfToken] = useState();
+  useEffect(() => {
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
+  }, []);
+
 
   const {
     register,
@@ -44,8 +59,10 @@ const ListProperty = () => {
       try {
         await fetch("http://localhost:3003/properties/listProperty", {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
+            'CSRF-Token': csrfToken, // Include CSRF token in the header
           },
           body: JSON.stringify({
             property: data,
@@ -56,7 +73,9 @@ const ListProperty = () => {
       } catch (error) {
         // Handle network errors
         console.error("Network error:", error);
+        toast.error("Property upload error")
       }
+      toast.success("Your property has been successfully uploaded!");
 
       reset();
     }
@@ -64,6 +83,7 @@ const ListProperty = () => {
 
   return (
     <>
+      <ToastContainer />
       <header>
         <div>
           <h2>Rent/Sell your property</h2>

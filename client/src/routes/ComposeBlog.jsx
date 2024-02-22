@@ -1,29 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
 import classes from "../assets/Styles/composeBlog.module.css";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
+
 const cloudUrl = "https://api.cloudinary.com/v1_1/diya8tmxd/image/upload";
 const preset = "ngjbzrk4";
 
 const ComposeBlog = () => {
   const [image, setImage] = useState("");
+  const [csrfToken, setCsrfToken] = useState();
   const user = useSelector((state) => state.auth.user);
   const [blogTitle, setBlogTitle] = useState("");
+  const [blogContent, setBlogContent] = useState("");
   const [type, setType] = useState(1);
   const typeHandler = (type) => {
     setType(type);
     setContent("");
   };
 
+  useEffect(() => {
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
+  }, []);
+
   const blogSubmitHandler = async (e) => {
     e.preventDefault();
 
     const blog = {
       blogTitle: blogTitle,
-      blogContent: content,
+      blogContent: blogContent,
     };
 
     const formData = new FormData();
@@ -35,15 +50,22 @@ const ComposeBlog = () => {
     try {
       const response = await fetch("http://localhost:3003/blogs/insert", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
+          'CSRF-Token': csrfToken, // Include CSRF token in the header
         },
         body: JSON.stringify({ user, image: url, blog }),
       });
+
     } catch (error) {
       // Handle network errors
       console.error("Network error:", error);
     }
+
+    await setBlogContent("")
+    await setBlogTitle("")
+    await setImage("")
   };
 
   const editor = useRef(null);
@@ -103,9 +125,11 @@ const ComposeBlog = () => {
 
     fetch(`http://localhost:3003/newsletterMail`, {
       method: "POST",
+      credentials: 'include',
       body: JSON.stringify(Object.fromEntries(formData)),
       headers: {
         "Content-Type": "application/json",
+        'CSRF-Token': csrfToken
       },
     });
 
@@ -146,9 +170,9 @@ const ComposeBlog = () => {
             <JoditEditor
               className={classes.Jeditor}
               ref={editor}
-              value={content}
+              value={blogContent}
               config={config}
-              onBlur={(newContent) => setContent(newContent)}
+              onBlur={(newContent) => setBlogContent(newContent)}
             />
           </div>
           <button className={classes.postButton} id="BfButton" type="submit">
@@ -225,6 +249,7 @@ const ComposeBlog = () => {
       </div>
       <div className={classes.container}>{AcContent}</div>
     </div>
+
   );
 };
 

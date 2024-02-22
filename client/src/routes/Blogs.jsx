@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/blogs.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -17,12 +17,29 @@ import BLogCardMini from "../components/BLogCardMini";
 const Blogs = () => {
   const blogs = useLoaderData();
   const [mail, setMail] = useState("");
+  const [csrfToken, setCsrfToken] = useState();
+
+  useEffect(() => {
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
+  }, []);
 
   const addMailHandler = (e) => {
     e.preventDefault();
 
     fetch(`http://localhost:3003/mail/${mail}`, {
       method: "POST",
+      credentials: 'include',
+      headers: {
+        'CSRF-Token': csrfToken, // Include CSRF token in the header
+      },
     });
     setMail("");
   };
@@ -41,7 +58,7 @@ const Blogs = () => {
         <div className={classes.icontainer}>
           <input
             className={classes.input1}
-            type="text"
+            type="email"
             placeholder="Enter your email address"
             value={mail}
             onChange={(e) => setMail(e.target.value)}

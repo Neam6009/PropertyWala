@@ -11,6 +11,7 @@ const AdminControl = () => {
   const [blogs, setBlogs] = useState([]);
   const [properties, setProperties] = useState([]);
   const [users, setUsers] = useState([]);
+  const [csrfToken, setCsrfToken] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,16 @@ const AdminControl = () => {
         res.json()
       );
 
-      console.log(blogs);
+      // Fetch CSRF token from the server
+      fetch('http://localhost:3003/csrf-token', {
+        method: 'GET',
+        credentials: 'include',
+      })
+        .then((response) => response.json())
+        .then((data) => setCsrfToken(data.csrfToken))
+        .catch((error) => console.error('Error fetching CSRF token:', error));
+
+
       setProperties(properties);
       setBlogs(blogs);
       setUsers(users);
@@ -97,8 +107,11 @@ const AdminControl = () => {
 
     fetch(`http://localhost:3003/allMail`, {
       method: "POST",
+      credentials: 'include',
       body: JSON.stringify(Object.fromEntries(formData)),
+
       headers: {
+        'CSRF-Token': csrfToken,
         "Content-Type": "application/json",
       },
     });
