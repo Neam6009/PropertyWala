@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import classes from "../assets/Styles/blogs.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,6 @@ import BLogCardMini from "../components/BLogCardMini";
 
 const Blogs = () => {
   const blogs = useLoaderData();
-  console.log(blogs);
   const [mail, setMail] = useState("");
 
   const addMailHandler = (e) => {
