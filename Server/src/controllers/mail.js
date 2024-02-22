@@ -49,11 +49,37 @@ exports.addMail = async (req, res) => {
 exports.sendMailAll = async (req, res) => {
   const subject = req.body.subject;
   const content = req.body.content;
-  console.log(req.body);
-  console.log(req.body.subject, req.body.content);
 
   const users = await user_model.User.find({});
   const userMails = users.map((user) => user.email);
+
+  // setup email data with unicode symbols
+  userMails.forEach((mail) => {
+    let mailOptions = {
+      from: "propertywala1438@gmail.com", // sender address
+      to: mail, // list of receivers
+      subject: subject, // Subject line
+      html: content, // html body
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  });
+
+  return res.send("Mail sent successfully");
+};
+
+exports.sendMailNewsletterAll = async (req, res) => {
+  const subject = req.body.subject;
+  const content = req.body.content;
+
+  const mailsList = await Mail.find({});
+  const userMails = mailsList.map((temp) => temp.mail);
 
   // setup email data with unicode symbols
   userMails.forEach((mail) => {
