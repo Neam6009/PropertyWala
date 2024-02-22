@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/navbar.module.css";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/images/PW_logo.png";
@@ -9,6 +9,19 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [csrfToken, setCsrfToken] = useState();
+
+  useEffect(() => {
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
+  }, []);
 
   const logOutHandler = async () => {
     try {
@@ -17,6 +30,7 @@ const Navbar = () => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          'CSRF-Token': csrfToken,
         },
       });
 

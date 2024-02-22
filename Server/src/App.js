@@ -8,14 +8,19 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 const morgan = require("morgan");
+const csrf = require('csurf');
+
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 
 const app = express();
+const csrfProtection = csrf({ cookie: true });
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(jsonParser);
+app.use(csrfProtection);
 
 const corsOptions = {
   origin: "http://localhost:5173",
@@ -44,6 +49,10 @@ app.post(
   userController.isLoggedIn,
   userController.wishlist
 );
+
+app.get('/csrf-token', (req, res) => {
+  res.status(200).json({ csrfToken: req.csrfToken() });
+});
 
 app.get("/users/all", userController.getAllUsers);
 app.post("/mail/:mailId", mailController.addMail);

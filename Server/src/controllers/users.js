@@ -5,51 +5,58 @@ const { promisify } = require("util");
 const mongoose = require("mongoose");
 const userModel = require("../models/user_model");
 const multer = require('multer');
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
 
 mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.json({
-        error: "Please Enter Your Email and Password",
-      });
-    }
-
-    // check if the user exists
-    const user = await userModel.User.findOne({ email: email });
-    if (!user) {
-      return res.json({
-        error: "Email not registered, register first",
-      });
-    } else {
-      if (!(await bcrypt.compare(password, user.password))) {
+    // Verify CSRF token
+    csrfProtection(req, res, async () => {
+      const { email, password } = req.body;
+      if (!email || !password) {
         return res.json({
-          error: "Incorrect password!",
-        });
-      } else {
-        const id = user._id;
-        const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN,
-        });
-        console.log("The Token is " + token);
-        const cookieOptions = {
-          expires: new Date(
-            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-          ),
-          httpOnly: true,
-        };
-        res.cookie("joes", token, cookieOptions);
-        return res.status(200).json({
-          user,
+          error: "Please Enter Your Email and Password",
         });
       }
-    }
+
+      // check if the user exists
+      const user = await userModel.User.findOne({ email: email });
+      if (!user) {
+        return res.json({
+          error: "Email not registered, register first",
+        });
+      } else {
+        if (!(await bcrypt.compare(password, user.password))) {
+          return res.json({
+            error: "Incorrect password!",
+          });
+        } else {
+          const id = user._id;
+          const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          });
+          console.log("The Token is " + token);
+          const cookieOptions = {
+            expires: new Date(
+              Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+            ),
+            httpOnly: true,
+          };
+          res.cookie("joes", token, cookieOptions);
+          return res.status(200).json({
+            user,
+          });
+        }
+      }
+    });
   } catch (error) {
     res.status(400).json({ error });
   }
 };
+
+
 
 exports.register = async (req, res) => {
   var lowerCaseLetters = /[a-z]/g;
@@ -97,36 +104,36 @@ exports.register = async (req, res) => {
   });
 };
 
-exports.changePassword = async (req,res) =>{
+exports.changePassword = async (req, res) => {
   console.log(req.body);
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
   const userId = req.body.userId;
 
   const user = await userModel.User.findById(userId);
-  if(await bcrypt.compare(oldPassword, user.password)){
-  let hashedPassword = await bcrypt.hash(newPassword, 8);
+  if (await bcrypt.compare(oldPassword, user.password)) {
+    let hashedPassword = await bcrypt.hash(newPassword, 8);
 
     user.password = hashedPassword;
     user.save();
-    res.json({success:"your password has been successfully changed!"})
-  }else{
-    return res.json({error: "please verify your old password"})
+    res.json({ success: "your password has been successfully changed!" })
+  } else {
+    return res.json({ error: "please verify your old password" })
   }
 
 }
 
-exports.deleteUser = async(req,res)=>{
+exports.deleteUser = async (req, res) => {
 
   const password = req.body.password;
   const userId = req.body.userId;
 
   const user = await userModel.User.findById(userId);
-  if(await bcrypt.compare(password, user.password)){
+  if (await bcrypt.compare(password, user.password)) {
     await user.deleteOne();
-    return res.json({success: "your account has been deleted!"});
-  }else{
-    return res.json({error:"wrong password!"});
+    return res.json({ success: "your account has been deleted!" });
+  } else {
+    return res.json({ error: "wrong password!" });
   }
 
 
@@ -211,7 +218,7 @@ exports.admin = async (req, res) => {
   res.end();
 };
 
-exports.setProfileImage = async (imgId,userId)=>{
+exports.setProfileImage = async (imgId, userId) => {
   const user = await userModel.User.findById(userId);
   user.profileImage = imgId;
   await user.save();

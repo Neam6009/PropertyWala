@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/login.module.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/auth/authSlice";
 
 const SignIn = () => {
+	const [csrfToken, setCsrfToken] = useState();
 	const [error, setError] = useState();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -12,17 +13,29 @@ const SignIn = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
+
+	useEffect(() => {
+		// Fetch CSRF token from the server
+		fetch('http://localhost:3003/csrf-token', {
+			method: 'GET',
+			credentials: 'include',
+		})
+			.then((response) => response.json())
+			.then((data) => setCsrfToken(data.csrfToken))
+			.catch((error) => console.error('Error fetching CSRF token:', error));
+
+	}, []);
+
 	const loginHandler = async (event) => {
 		event.preventDefault();
 
-		console.log(email, password);
-
 		try {
-			const response = await fetch("http://localhost:3003/auth/login", {
-				method: "POST",
-				credentials: "include",
+			const response = await fetch('http://localhost:3003/auth/login', {
+				method: 'POST',
+				credentials: 'include',
 				headers: {
-					"Content-Type": "application/json",
+					'Content-Type': 'application/json',
+					'CSRF-Token': csrfToken, // Include CSRF token in the header
 				},
 				body: JSON.stringify({ email, password }),
 			});

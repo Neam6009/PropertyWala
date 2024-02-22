@@ -1,19 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/AdminControlUserCard.module.css";
 
 const AdminControlUserCard = ({ user }) => {
 	const [isCertified, setIsCetified] = useState(user.isCertified);
 	const [isAdmin, setIsAdmin] = useState(user.isAdmin);
+	const [csrfToken, setCsrfToken] = useState();
+
+	useEffect(() => {
+		// Fetch CSRF token from the server
+		fetch('http://localhost:3003/csrf-token', {
+			method: 'GET',
+			credentials: 'include',
+		})
+			.then((response) => response.json())
+			.then((data) => setCsrfToken(data.csrfToken))
+			.catch((error) => console.error('Error fetching CSRF token:', error));
+
+	}, []);
 
 	const certifiedHandler = async (change) => {
 		await fetch(`http://localhost:3003/certified/${user._id}/${change}`, {
 			method: "POST",
+			credentials: 'include',
+			headers: {
+				'CSRF-Token': csrfToken, // Include CSRF token in the header
+			},
 		});
 		setIsCetified(change);
 	};
 	const adminHandler = async (change) => {
 		await fetch(`http://localhost:3003/admin/${user._id}/${change}`, {
 			method: "POST",
+			credentials: 'include',
+			headers: {
+				'CSRF-Token': csrfToken, // Include CSRF token in the header
+			},
+
 		});
 		setIsAdmin(change);
 	};

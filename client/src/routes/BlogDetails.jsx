@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/blog-details.module.css";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 import authorImg from "../assets/images/PW_aboutUs_person2.png";
@@ -7,10 +7,24 @@ import blog2img from "../assets/images/PW_blogs_image11.jpg";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/auth/authSlice";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const BlogDetailsPage = () => {
   const { id } = useParams();
+  const [csrfToken, setCsrfToken] = useState();
+
+
+  useEffect(() => {
+    // Fetch CSRF token from the server
+    fetch('http://localhost:3003/csrf-token', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch((error) => console.error('Error fetching CSRF token:', error));
+
+  }, []);
 
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
@@ -19,19 +33,23 @@ const BlogDetailsPage = () => {
   const blogs = useLoaderData();
   const blog = blogs.find((e) => e._id == id);
 
- 
-  const deleteBlogHandler =async ()=>{
-    const confirm = prompt("please enter \""+ blog.title +"\" to delete this blog");
 
-    if(confirm){
-      if(confirm == blog.title){
+  const deleteBlogHandler = async () => {
+    const confirm = prompt("please enter \"" + blog.title + "\" to delete this blog");
+
+    if (confirm) {
+      if (confirm == blog.title) {
         fetch(`http://localhost:3003/blogs/deleteBlog/${blog._id}`, {
-        method: "POST",
-      }).then(() => alert("This blog has been deleted!"));
+          method: "POST",
+          credentials: 'include',
+          headers: {
+            'CSRF-Token': csrfToken, // Include CSRF token in the header
+          },
+        }).then(() => alert("This blog has been deleted!"));
 
-      navigate("/blogs");
+        navigate("/blogs");
 
-      }else{
+      } else {
         alert("wrong blog title!")
       }
     }
@@ -44,7 +62,7 @@ const BlogDetailsPage = () => {
     <div className={classes.blogDetailsALL}>
       <header className={classes.header}>
         <h1>{blog.title}</h1>
-        {user && blog.blog_user_id == user._id? <button className={classes.deleteBlogButton} onClick={deleteBlogHandler}>delete blog</button>: ""}
+        {user && blog.blog_user_id == user._id ? <button className={classes.deleteBlogButton} onClick={deleteBlogHandler}>delete blog</button> : ""}
         <div>
           <p>
             By <span>{blog.blogAuthor}</span> .{" "}
