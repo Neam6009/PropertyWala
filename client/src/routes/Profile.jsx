@@ -163,7 +163,7 @@ const Profile = () => {
 
   const changePassword = (
     <div className={classes.changePasswordBox}>
-      <input type="password" placeholder="Enter new old password" value={oldPassword} onChange={(e => setOldPassword(e.target.value))} />
+      <input type="password" placeholder="Enter old password" value={oldPassword} onChange={(e => setOldPassword(e.target.value))} />
       <input type="password" placeholder="Enter new password" value={newPassword} onChange={(e => setNewPassword(e.target.value))} />
       <input type="password" placeholder="Re enter new password" value={ReNewPassword} onChange={(e => setReNewPassword(e.target.value))} />
       <button className={classes.cpButton} onClick={changePasswordHandler}>Change Password!</button>
