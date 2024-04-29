@@ -118,7 +118,7 @@ const PropertyDetails = () => {
               <span>{property.locality}</span>
             </div>
             <div className={classes.dfButtons}>
-              {user && user.email == property.lister.email ? <button onClick={removePropertyHandler}>Delete</button> : ""}
+              {user && user._id == property.user_id ? <button onClick={removePropertyHandler}>Delete</button> : ""}
               {user && wishlist ? <button onClick={wishListHandler}>Wishlisted</button> : <button onClick={wishListHandler}>Wishlist</button>}
             </div>
           </div>

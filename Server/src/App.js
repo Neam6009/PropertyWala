@@ -71,6 +71,8 @@ app.post("/newsletterMail", mailController.sendMailNewsletterAll);
 
 app.post("/certified/:userId/:change", userController.certified);
 app.post("/admin/:userId/:change", userController.admin);
+app.post("/admin/deleteUserByAdmin", userController.deleteUserByAdmin);
+
 
 app.get("/profileImage/:imgId", (req, res) => {
   const imgId = req.params.imgId;

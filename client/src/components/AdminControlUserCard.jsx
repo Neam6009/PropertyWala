@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import classes from "../assets/Styles/AdminControlUserCard.module.css";
+import { useSelector } from "react-redux";
 
 const AdminControlUserCard = ({ user }) => {
 	const [isCertified, setIsCetified] = useState(user.isCertified);
 	const [isAdmin, setIsAdmin] = useState(user.isAdmin);
 	const [csrfToken, setCsrfToken] = useState();
+	const CurrentUser = useSelector((state) => state.auth.user);
+
 
 	useEffect(() => {
 		// Fetch CSRF token from the server
@@ -39,6 +42,36 @@ const AdminControlUserCard = ({ user }) => {
 		});
 		setIsAdmin(change);
 	};
+
+	const removeUserHandler = async (CurrentUser, deleteUser) => {
+		const currentUserId = CurrentUser._id
+		const deleteUserId = deleteUser._id
+		if (currentUserId == deleteUserId) {
+			alert("you can't delete your own account here!");
+			return;
+		} else {
+			const response = await fetch(`http://localhost:3003/admin/deleteUserByAdmin`, {
+				method: "POST",
+				credentials: 'include',
+				headers: {
+					"Content-Type": "application/json",
+					'CSRF-Token': csrfToken, // Include CSRF token in the header
+				},
+				body: JSON.stringify({ deleteUserId: deleteUserId }),
+
+			});
+
+			const data = await response.json();
+			if (response.status !== 200) {
+				alert(data.error);
+			} else if (response.status == 200) {
+				alert(data.success);
+			}
+
+		}
+
+	};
+
 
 	return (
 		<div>
@@ -75,6 +108,11 @@ const AdminControlUserCard = ({ user }) => {
 							Make Admin
 						</button>
 					)}
+					{
+						<button onClick={() => removeUserHandler(CurrentUser, user)}>
+							Remove user
+						</button>
+					}
 				</div>
 			</div>
 		</div>

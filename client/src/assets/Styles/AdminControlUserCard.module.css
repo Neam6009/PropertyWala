@@ -39,13 +39,15 @@
 }
 
 .userCardButtons button {
-  padding: 1rem 2rem;
-  border-radius: 5px;
+  padding: 1rem ;
+  border-radius: 0.5rem;
   outline: none;
   background-color: #7164f0;
   color: white;
   border: 1px solid white;
   cursor: pointer;
+  max-width: 7rem;
+  text-align: center;
 }
 
 @media (max-width: 700px) {

@@ -8,7 +8,25 @@ const multer = require('multer');
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 
-mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
+const doenv = require("dotenv");
+
+doenv.config({
+  path: "./.env",
+});
+
+MongoDB_URI = process.env.MONGODB_URI;
+
+mongoose.connect(MongoDB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => {
+    console.log("Connected to MongoDB");
+    // Now you can start using your mongoose models
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
 exports.login = async (req, res) => {
   try {
@@ -217,6 +235,21 @@ exports.admin = async (req, res) => {
 
   res.end();
 };
+
+
+exports.deleteUserByAdmin = async (req, res) => {
+  deleteUserId = req.body.deleteUserId;
+
+  const user = await userModel.User.findById(deleteUserId);
+  try {
+    await user.deleteOne();
+    return res.status(200).json({ success: "user account has been deleted!" });
+
+  } catch (error) {
+    res.status(401).json({ error: "there was an error deleting the account" })
+  }
+
+}
 
 exports.setProfileImage = async (imgId, userId) => {
   const user = await userModel.User.findById(userId);

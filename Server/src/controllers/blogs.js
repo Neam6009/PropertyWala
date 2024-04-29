@@ -1,7 +1,24 @@
 const mongoose = require("mongoose");
 const blogModel = require("../models/blog_model");
+const doenv = require("dotenv");
 
-mongoose.connect("mongodb://0.0.0.0:27017/FFSD_DB");
+doenv.config({
+	path: "./.env",
+});
+
+MongoDB_URI = process.env.MONGODB_URI;
+
+mongoose.connect(MongoDB_URI, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true
+})
+	.then(() => {
+		console.log("Connected to MongoDB");
+		// Now you can start using your mongoose models
+	})
+	.catch((error) => {
+		console.error("Error connecting to MongoDB:", error);
+	});
 
 exports.getAllBlogs = async (req, res) => {
 	try {

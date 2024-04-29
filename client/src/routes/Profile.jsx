@@ -225,6 +225,7 @@ const Profile = () => {
           "http://localhost:3003/auth/deleteUser",
           {
             method: "POST",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
               'CSRF-Token': csrfToken, // Include CSRF token in the header
