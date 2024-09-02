@@ -2,8 +2,6 @@ WBD project
 
 How to run the project
 
-!!IMPORTANT!! Internet connection is mandatory.
-
 
 1.NodeJs, MongoDb and MongoDb compass must be installed.
 2.Connect your MongoDB compass to local host.
